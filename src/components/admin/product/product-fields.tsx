@@ -1,19 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
     Box,
     Button,
     Card,
     CardContent,
-    Checkbox,
     Divider,
-    FormControl,
     Grid,
-    InputLabel,
-    ListItemText,
-    MenuItem,
-    OutlinedInput,
-    Select,
-    SelectChangeEvent,
     TextField,
     Typography,
 } from '@mui/material';
@@ -22,11 +14,9 @@ import StockTable from './stock-table';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ProductModel, StockModel } from '../../../models/product.d';
-import {
-    fetchProductCategories,
-    fetchProductDeliveryMethods,
-} from '../../../api/StoreApi';
-import { useQuery } from 'react-query';
+import ProductCategorySelector from './product-category-selector';
+import ProductDeliverySelector from './product-delivery-selector';
+import { IDeliveryMethod } from '../../../api/store-api';
 
 interface ProductFieldsProps {
     product?: ProductModel;
@@ -37,79 +27,39 @@ export default function ProductFields({
     onSubmitCallback = (product: ProductModel) => {},
     ...props
 }: ProductFieldsProps) {
-    const [delivery, setDelivery] = React.useState<string[]>([]);
-    const [category, setCategory] = React.useState('');
-
     const [stock, setStock] = React.useState<StockModel[]>([]);
+    const categoryId = useRef(0);
+    const deliveryMethods = useRef<IDeliveryMethod[]>([]);
 
-    const productCategories = useQuery({
-        queryKey: ['productCategories'],
-        queryFn: fetchProductCategories,
-    });
-
-    const productDeliveryMethods = useQuery({
-        queryKey: ['productDeliveryMethods'],
-        queryFn: fetchProductDeliveryMethods,
-    });
-
-    const handleChange = (event: SelectChangeEvent<typeof delivery>) => {
-        const {
-            target: { value },
-        } = event;
-        setDelivery(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value
-        );
-    };
-
-    const formik = useFormik({
+    const formik = useFormik<ProductModel>({
         initialValues: {
-            name: product?.name,
-            descriptions: product?.descriptions,
-            metaKeywords: product?.metaKeywords,
-            price: product?.price,
-            discountAmount: product?.discountAmount,
-            discountPercent: product?.discountPercent,
-            vatAmount: product?.vatAmount,
-            provider: product?.provider,
-            barcode: product?.barcode,
+            ...product,
         },
         validationSchema: Yup.object({
-            // name: Yup.string().max(562).required('Product name is required'),
-            // provider: Yup.string()
-            //     .max(100)
-            //     .required('Product type is required'),
-            // category: Yup.string()
-            //     .max(100)
-            //     .required('Product category is required'),
-            // descriptions: Yup.string()
-            //     .max(1000)
-            //     .required('Product descriptions is required'),
-            // metaKeywords: Yup.string()
-            //     .max(1000)
-            //     .required('Product meta keywords is required'),
-            // price: Yup.number().required('Product price is required'),
-            // discountAmount: Yup.number(),
-            // discountPercent: Yup.number(),
-            // vatAmount: Yup.number(),
-            // barcode: Yup.string()
-            //     .max(100)
-            //     .required('Product category is required'),
+            name: Yup.string().max(562).required('Product name is required'),
+            provider: Yup.string()
+                .max(100)
+                .required('Product provider is required'),
+            descriptions: Yup.string()
+                .max(1000)
+                .required('Product descriptions is required'),
+            metaKeywords: Yup.string()
+                .max(1000)
+                .required('Product meta keywords is required'),
+            price: Yup.number().required('Product price is required'),
+            discountAmount: Yup.number(),
+            discountPercent: Yup.number(),
+            vatAmount: Yup.number(),
+            barcode: Yup.string()
+                .max(100)
+                .required('Product category is required'),
         }),
 
         onSubmit: () => {
             const product: ProductModel = {
-                name: formik.values.name,
-                category: category,
-                descriptions: formik.values.descriptions,
-                metaKeywords: formik.values.metaKeywords,
-                price: formik.values.price,
-                discountAmount: formik.values.discountAmount,
-                discountPercent: formik.values.discountPercent,
-                vatAmount: formik.values.vatAmount,
-                provider: formik.values.provider,
-                barcode: formik.values.barcode,
-                deliveryMethod: delivery,
+                ...formik.values,
+                categoryId: categoryId.current,
+                deliveryMethods: deliveryMethods.current,
                 stock: stock,
             };
             onSubmitCallback(product);
@@ -136,7 +86,7 @@ export default function ProductFields({
                             <Grid item xs={6} md={4}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="name-input"
                                     label="Name"
                                     variant="outlined"
                                     fullWidth
@@ -158,7 +108,7 @@ export default function ProductFields({
                             <Grid item xs={6} md={4}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="provider-input"
                                     label="Provider"
                                     variant="outlined"
                                     fullWidth
@@ -177,41 +127,23 @@ export default function ProductFields({
                                     name="provider"
                                 />
                             </Grid>
-                            <Grid item xs={6} md={4}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">
-                                        Category
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={category}
-                                        name="category"
-                                        label="Category"
-                                        onChange={(
-                                            event: SelectChangeEvent
-                                        ) => {
-                                            setCategory(
-                                                event.target.value as string
-                                            );
-                                        }}
-                                    >
-                                        {productCategories.data?.map(
-                                            (category) => (
-                                                <MenuItem
-                                                    value={category.categoryId}
-                                                >
-                                                    {category.name}
-                                                </MenuItem>
-                                            )
-                                        )}
-                                    </Select>
-                                </FormControl>
+                            <Grid
+                                item
+                                xs={12}
+                                md={12}
+                                display="flex"
+                                spacing={4}
+                            >
+                                <ProductCategorySelector
+                                    onChangeCategoryId={(catId) => {
+                                        categoryId.current = catId;
+                                    }}
+                                />
                             </Grid>
                             <Grid item xs={12} md={12}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="description-input"
                                     label="Description"
                                     variant="outlined"
                                     name="descriptions"
@@ -235,7 +167,7 @@ export default function ProductFields({
                             <Grid item xs={12} md={12}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="meta-input"
                                     label="Meta Keywords"
                                     variant="outlined"
                                     name="metaKeywords"
@@ -268,7 +200,7 @@ export default function ProductFields({
                             <Grid item xs={6} md={4}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="price-input"
                                     label="Price"
                                     name="price"
                                     variant="outlined"
@@ -290,7 +222,7 @@ export default function ProductFields({
                             <Grid item xs={6} md={4}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="discount-amount-input"
                                     label="Discount Amount"
                                     variant="outlined"
                                     name="discountAmount"
@@ -312,7 +244,7 @@ export default function ProductFields({
                             <Grid item xs={6} md={4}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="discount-percent-input"
                                     label="Discount Percent"
                                     name="discountPercent"
                                     variant="outlined"
@@ -335,7 +267,7 @@ export default function ProductFields({
                             <Grid item xs={6} md={4}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="vat-amount-input"
                                     label="Vat Amount"
                                     variant="outlined"
                                     name="vatAmount"
@@ -357,7 +289,7 @@ export default function ProductFields({
                             <Grid item xs={6} md={4}>
                                 <TextField
                                     required
-                                    id="outlined-basic"
+                                    id="barcode-input"
                                     label="Barcode"
                                     variant="outlined"
                                     name="barcode"
@@ -377,46 +309,11 @@ export default function ProductFields({
                                 />
                             </Grid>
                             <Grid item xs={6} md={4}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-multiple-checkbox-label">
-                                        Delivery methods
-                                    </InputLabel>
-                                    <Select
-                                        labelId="demo-multiple-checkbox-label"
-                                        id="demo-multiple-checkbox"
-                                        multiple
-                                        value={delivery}
-                                        onChange={handleChange}
-                                        input={
-                                            <OutlinedInput label="Delivery methods" />
-                                        }
-                                        renderValue={(selected) =>
-                                            selected.join(', ')
-                                        }
-                                    >
-                                        {productDeliveryMethods?.data?.map(
-                                            (del) => (
-                                                <MenuItem
-                                                    key={del.deliveryTypeId}
-                                                    value={del.deliveryName}
-                                                >
-                                                    <Checkbox
-                                                        checked={
-                                                            delivery.indexOf(
-                                                                del.deliveryName
-                                                            ) > -1
-                                                        }
-                                                    />
-                                                    <ListItemText
-                                                        primary={
-                                                            del.deliveryName
-                                                        }
-                                                    />
-                                                </MenuItem>
-                                            )
-                                        )}
-                                    </Select>
-                                </FormControl>
+                                <ProductDeliverySelector
+                                    onChangeDeliveryMethods={(deliveries) => {
+                                        deliveryMethods.current = deliveries;
+                                    }}
+                                />
                             </Grid>
                             <Grid item xs={12} md={12}>
                                 <Divider
@@ -494,9 +391,6 @@ export default function ProductFields({
                                     color="primary"
                                     variant="contained"
                                     type="submit"
-                                    onClick={() => {
-                                        formik.submitForm();
-                                    }}
                                 >
                                     Save product
                                 </Button>

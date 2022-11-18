@@ -1,9 +1,10 @@
+import { IDeliveryMethod } from "../api/store-api";
 
 
 
 export type ProductModel = {
     name?: string;
-    category?: string;
+    categoryId?: number;
     descriptions?: string;
     metaKeywords?: string;
     price?: number;
@@ -12,7 +13,7 @@ export type ProductModel = {
     vatAmount?: number;
     barcode?: string;
     provider?: string;
-    deliveryMethod?: string[];
+    deliveryMethods?: IDeliveryMethod[];
     stock?: StockModel[];
     imagesUrl?: string[];
 }

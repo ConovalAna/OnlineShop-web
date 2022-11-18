@@ -31,7 +31,7 @@ const Routing = () => (
             <Route path="/register" element={<UnauthenticatedRoute />}>
                 <Route path="/register" element={<RegisterPage />} />
             </Route>
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<LoginPage />} />
         </Routes>
     </Router>
 );

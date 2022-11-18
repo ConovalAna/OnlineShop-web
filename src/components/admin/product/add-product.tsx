@@ -3,21 +3,9 @@ import { ProductModel } from '../../../models/product';
 import React from 'react';
 import ProductFields from './product-fields';
 import { IProduct, IStock } from '../../../api/store-api';
-import {
-    fetchProductCategories,
-    fetchProductDeliveryMethods,
-} from '../../../api/StoreApi';
-import { useQuery } from 'react-query';
-export default function AddProduct(props: any) {
-    const productCategories = useQuery({
-        queryKey: ['productCategories'],
-        queryFn: fetchProductCategories,
-    });
+import { addProductAsync } from '../../../api/StoreApi';
 
-    const productDeliveryMethods = useQuery({
-        queryKey: ['productDeliveryMethods'],
-        queryFn: fetchProductDeliveryMethods,
-    });
+export default function AddProduct(props: any) {
     const onSubmit = (product: ProductModel) => {
         const productToSubmit: IProduct = {
             productId: 0,
@@ -28,16 +16,10 @@ export default function AddProduct(props: any) {
             discountAmount: product.discountAmount ?? 0,
             vatAmount: product.vatAmount ?? 0,
             barcode: product.barcode ?? '',
-            categoryId:
-                productCategories.data?.find(
-                    (pc) => pc.name == product.category
-                )?.categoryId ?? 0,
-            deliveryTypeId:
-                productDeliveryMethods.data?.find(
-                    (pd) =>
-                        pd.deliveryName === product.deliveryMethod?.[0] ?? ''
-                )?.deliveryTypeId ?? 0,
-            stock:
+            categoryId: product.categoryId ?? 0,
+            deliveryTypes: product.deliveryMethods,
+            imagesUrl: ['Test1', 'test'],
+            stocks:
                 product.stock?.map((stock) => {
                     var s: IStock = {
                         stockId: stock.id,
@@ -50,6 +32,7 @@ export default function AddProduct(props: any) {
         };
 
         console.log(productToSubmit);
+        addProductAsync(productToSubmit);
     };
     return (
         <Box

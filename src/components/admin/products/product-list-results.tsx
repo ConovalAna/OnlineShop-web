@@ -12,15 +12,17 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-export default function ProductListResults({
-    products,
-    ...rest
-}: {
-    products: any[];
-}) {
+import ProductActions from './product-actions';
+import {
+    useProductsQuery,
+    useProductCategoriesQuery,
+} from '../../../api/use-store-api';
+export default function ProductListResults() {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
+
+    const productsQuery = useProductsQuery();
+    const productCategories = useProductCategoriesQuery();
 
     const handleLimitChange = (event: any) => {
         setLimit(event.target.value);
@@ -31,7 +33,7 @@ export default function ProductListResults({
     };
 
     return (
-        <Card {...rest}>
+        <Card>
             <PerfectScrollbar>
                 <Box sx={{ minWidth: 1050 }}>
                     <Table>
@@ -47,46 +49,65 @@ export default function ProductListResults({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {products.slice(0, limit).map((product) => (
-                                <TableRow hover key={product.id}>
-                                    <TableCell>{product.id}</TableCell>
-                                    <TableCell>
-                                        <Box
-                                            sx={{
-                                                alignItems: 'center',
-                                                display: 'flex',
-                                            }}
-                                        >
-                                            <Avatar
-                                                src={product.avatarUrl}
-                                                sx={{ mr: 2 }}
+                            {productsQuery.data
+                                ?.slice(page * limit, page * limit + limit)
+                                .map((product) => (
+                                    <TableRow hover key={product.productId}>
+                                        <TableCell>
+                                            {product.productId}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Box
+                                                sx={{
+                                                    alignItems: 'center',
+                                                    display: 'flex',
+                                                }}
                                             >
-                                                {product.name}
-                                            </Avatar>
-                                            <Typography
-                                                color="textPrimary"
-                                                variant="body1"
-                                            >
-                                                {product.name}
-                                            </Typography>
-                                        </Box>
-                                    </TableCell>
-                                    <TableCell>{product.code}</TableCell>
-                                    <TableCell>{product.type}</TableCell>
-                                    <TableCell>{product.price}</TableCell>
-                                    <TableCell>{product.stock}</TableCell>
-                                    <TableCell>
-                                        <MoreVertIcon />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                                <Avatar
+                                                    src={product.imagesUrl?.find(
+                                                        (i) => i != null
+                                                    )}
+                                                    sx={{ mr: 2 }}
+                                                >
+                                                    {product.name}
+                                                </Avatar>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    variant="body1"
+                                                >
+                                                    {product.name}
+                                                </Typography>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell>{product.barcode}</TableCell>
+                                        <TableCell>
+                                            {productCategories.data?.find(
+                                                (pc) =>
+                                                    pc.categoryId ==
+                                                    product.categoryId
+                                            )?.name ?? '....'}
+                                        </TableCell>
+                                        <TableCell>{product.price}</TableCell>
+                                        <TableCell>
+                                            {product.stocks
+                                                ?.map((s) => s.quantity)
+                                                .reduce((a, b) => a + b, 0) ??
+                                                0}
+                                        </TableCell>
+                                        <TableCell>
+                                            <ProductActions
+                                                productId={product.productId}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                 </Box>
             </PerfectScrollbar>
             <TablePagination
                 component="div"
-                count={products.length}
+                count={productsQuery.data?.length ?? 0}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}

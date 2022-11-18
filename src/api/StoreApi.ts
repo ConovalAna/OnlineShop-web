@@ -1,6 +1,7 @@
 import APIClient from "./api";
 import { ICategory, IDeliveryMethod, IProduct } from "./store-api";
 
+
 export function fetchProductCategories(): Promise<ICategory[]> {
     return StoreApi.Instance.fetchCategories();
 }
@@ -9,8 +10,16 @@ export function fetchProductDeliveryMethods(): Promise<IDeliveryMethod[]> {
     return StoreApi.Instance.fetchDeliveryMethods();
 }
 
-export function addProduct(product: IProduct): Promise<any> {
+export function addProductAsync(product: IProduct): Promise<any> {
     return StoreApi.Instance.addProduct(product);
+}
+
+export function fetchProductsAsync(): Promise<IProduct[]> {
+    return StoreApi.Instance.fetchProducts();
+}
+
+export function deleteProductsAsync(productId: number): Promise<any> {
+    return StoreApi.Instance.DeleteProduct(productId);
 }
 
 
@@ -36,8 +45,8 @@ class StoreApi extends APIClient {
 
 
     async fetchProducts(): Promise<IProduct[]> {
-        const categories = await this.doGET("products", {});
-        return categories as IProduct[];
+        const products = await this.doGET("products", {});
+        return products as IProduct[];
     }
 
     async addProduct(product: IProduct): Promise<any> {
@@ -49,6 +58,9 @@ class StoreApi extends APIClient {
         const response = await this.doPUT("products", product);
         return response;
     }
-
+    async DeleteProduct(productId: number): Promise<any> {
+        const response = await this.doDELETE(`products/${productId}`, {});
+        return response;
+    }
 
 }

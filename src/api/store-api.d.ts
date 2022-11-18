@@ -31,12 +31,11 @@ export interface IProduct {
     vatAmount: number,
     barcode: string,
     categoryId: number,
-    deliveryTypeId: number,
     isDeleted?: boolean,
     created?: string,
     updated?: string,
-    imagesUrl?: IImageUrl[],
-    stock?: IStock[],
+    imagesUrl?: string[],
+    stocks?: IStock[],
     category?: ICategory,
-    deliveryType?: IDeliveryMethod
+    deliveryTypes?: IDeliveryMethod[]
 }

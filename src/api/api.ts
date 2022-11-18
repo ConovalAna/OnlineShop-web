@@ -38,7 +38,7 @@ export default class APIClient {
         throw error;
     }
     parseResponse(response: any) {
-        return response.json().then(
+        return response?.json().then(
             (data: any) =>
                 new Promise((resolve, reject) => {
                     if (response.status >= 400) {
@@ -52,7 +52,9 @@ export default class APIClient {
                         resolve(data);
                     }
                 })
-        );
+        ).catch(() => {
+            return {};
+        });
     }
 
     async request(url: string, options: APIOptions): Promise<any> {
@@ -93,6 +95,14 @@ export default class APIClient {
             headers: { ...this.defaultHeaders, ...(options.headers || {}) },
             method: 'PUT',
             body: data ? JSON.stringify(data) : data,
+            ...options,
+        });
+    }
+
+    doDELETE(path: string, options: APIOptions) {
+        return this.request(this.getUrl(path), {
+            headers: { ...this.defaultHeaders, ...(options.headers || {}) },
+            method: 'DELETE',
             ...options,
         });
     }
