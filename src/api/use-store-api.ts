@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteProductsAsync, fetchProductCategories, fetchProductsAsync } from "./StoreApi";
+import { deleteProductsAsync, fetchProductAsync, fetchProductCategories, fetchProductsAsync } from "./StoreApi";
 
 export const useProductsQuery = () =>
     useQuery(['products'], fetchProductsAsync, { staleTime: 20000 })
@@ -28,3 +28,8 @@ export const useProductDeleteMutation = () => {
         },
     })
 };
+
+export const useFetchProductQuery = (productId: number) => {
+    return useQuery(['product', productId], () => fetchProductAsync(productId), { staleTime: Infinity })
+}
+

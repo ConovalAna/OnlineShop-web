@@ -1,3 +1,4 @@
+import { threadId } from "worker_threads";
 import APIClient from "./api";
 import { ICategory, IDeliveryMethod, IProduct } from "./store-api";
 
@@ -20,6 +21,10 @@ export function fetchProductsAsync(): Promise<IProduct[]> {
 
 export function deleteProductsAsync(productId: number): Promise<any> {
     return StoreApi.Instance.DeleteProduct(productId);
+}
+
+export function fetchProductAsync(productId: number): Promise<IProduct> {
+    return StoreApi.Instance.fetchProduct(productId);
 }
 
 
@@ -48,6 +53,12 @@ class StoreApi extends APIClient {
         const products = await this.doGET("products", {});
         return products as IProduct[];
     }
+
+    async fetchProduct(productId: number): Promise<IProduct> {
+        const product = await this.doGET(`products/${productId}`, {});
+        return product as IProduct;
+    }
+
 
     async addProduct(product: IProduct): Promise<any> {
         const response = await this.doPOST("products", product);

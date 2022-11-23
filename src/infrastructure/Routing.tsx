@@ -11,6 +11,7 @@ import Store from '../components/store';
 import Admin from '../components/admin';
 import AdminProducts from '../components/admin/products';
 import AddProduct from '../components/admin/product/add-product';
+import EditProduct from '../components/admin/product/edit-product';
 
 const Routing = () => (
     <Router>
@@ -20,6 +21,10 @@ const Routing = () => (
                 <Route path="/" element={<Admin />}>
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="products/add" element={<AddProduct />} />
+                    <Route
+                        path="products/edit/:productId"
+                        element={<EditProduct />}
+                    />
                 </Route>
             </Route>
             <Route path="/" element={<UnauthenticatedRoute />}>

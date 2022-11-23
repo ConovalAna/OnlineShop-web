@@ -38,14 +38,7 @@ type StockModelRowModel = GridValidRowModel & {
 
 const SizeList = ToArray(Size);
 
-const initialRows: GridRowsProp<StockModelRowModel> = [
-    {
-        id: 1,
-        sizeText: 'M',
-        quantity: 1,
-        color: 'purple',
-    },
-];
+const initialRows: GridRowsProp<StockModelRowModel> = [];
 
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;

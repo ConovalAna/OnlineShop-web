@@ -331,6 +331,7 @@ export default function ProductFields({
                                     onChangeStock={(stock) => {
                                         setStock(stock);
                                     }}
+                                    initStock={product?.stock}
                                 />
                             </Grid>
 
