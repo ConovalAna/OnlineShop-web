@@ -15,6 +15,10 @@ export function addProductAsync(product: IProduct): Promise<any> {
     return StoreApi.Instance.addProduct(product);
 }
 
+export function editProductAsync(product: IProduct): Promise<any> {
+    return StoreApi.Instance.UpdateProduct(product);
+}
+
 export function fetchProductsAsync(): Promise<IProduct[]> {
     return StoreApi.Instance.fetchProducts();
 }
@@ -59,7 +63,6 @@ class StoreApi extends APIClient {
         return product as IProduct;
     }
 
-
     async addProduct(product: IProduct): Promise<any> {
         const response = await this.doPOST("products", product);
         return response;
@@ -69,6 +72,7 @@ class StoreApi extends APIClient {
         const response = await this.doPUT("products", product);
         return response;
     }
+
     async DeleteProduct(productId: number): Promise<any> {
         const response = await this.doDELETE(`products/${productId}`, {});
         return response;

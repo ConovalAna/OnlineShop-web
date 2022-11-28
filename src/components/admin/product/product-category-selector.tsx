@@ -11,6 +11,7 @@ import { ICategory } from '../../../api/store-api.d';
 
 interface ProductCategorySelectorProps {
     onChangeCategoryId: (categoryId: number) => void;
+    prSelectedCategoryId?: number;
 }
 
 interface CategoryDropdownDetails {
@@ -21,11 +22,25 @@ interface CategoryDropdownDetails {
 
 export default function ProductCategorySelector({
     onChangeCategoryId,
+    prSelectedCategoryId,
 }: ProductCategorySelectorProps) {
     const [categoriesDropDetail, setCategoriesDropDetail] = useState<
         CategoryDropdownDetails[]
     >([]);
     const productCategories = useProductCategoriesQuery();
+    const getRoute = (categoryId: number) => {
+        let route = [categoryId];
+        let cat = productCategories?.data?.find(
+            (i) => i.categoryId == categoryId
+        );
+        while (cat?.parentCategoryId != null || cat) {
+            cat = productCategories?.data?.find(
+                (i) => i.categoryId == cat?.parentCategoryId
+            );
+            cat && route.push(cat?.categoryId);
+        }
+        return route.reverse();
+    };
 
     useEffect(() => {
         const parentCategories =
@@ -39,6 +54,13 @@ export default function ProductCategorySelector({
                 selectOptions: parentCategories,
             },
         ]);
+        console.log(productCategories.data);
+        if (prSelectedCategoryId) {
+            let route = getRoute(prSelectedCategoryId);
+            route?.forEach((element, index) => {
+                changeCategoryId(index, element.toString());
+            });
+        }
     }, [productCategories.data]);
 
     useEffect(() => {
@@ -95,7 +117,10 @@ export default function ProductCategorySelector({
                     }}
                 >
                     {categoryDropDetails.selectOptions?.map((category) => (
-                        <MenuItem value={category.categoryId}>
+                        <MenuItem
+                            value={category.categoryId}
+                            key={category.categoryId}
+                        >
                             {category.name}
                         </MenuItem>
                     ))}

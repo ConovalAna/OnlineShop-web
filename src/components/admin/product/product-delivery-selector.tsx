@@ -15,12 +15,29 @@ import { IDeliveryMethod } from '../../../api/store-api';
 
 interface IProductDeliverySelector {
     onChangeDeliveryMethods: (deliveryMethods: IDeliveryMethod[]) => void;
+    checkedDeliveryMethods?: IDeliveryMethod[];
 }
 
 export default function ProductDeliverySelector({
     onChangeDeliveryMethods,
+    checkedDeliveryMethods,
 }: IProductDeliverySelector) {
-    const [deliveryMethods, setDeliveryMethods] = React.useState<string[]>([]);
+    const productDeliveryMethods = useQuery({
+        queryKey: ['productDeliveryMethods'],
+        queryFn: fetchProductDeliveryMethods,
+    });
+
+    const [deliveryMethods, setDeliveryMethods] = React.useState<string[]>(
+        productDeliveryMethods.data
+            ?.filter((pdm) =>
+                checkedDeliveryMethods?.some(
+                    (dm) => dm.deliveryTypeId === pdm.deliveryTypeId
+                )
+            )
+            .map((i) => i.deliveryName) ?? []
+
+        //checkedDeliveryMethods?.map((i) => i.deliveryName) ?? []
+    );
 
     useEffect(() => {
         onChangeDeliveryMethods(
@@ -30,10 +47,17 @@ export default function ProductDeliverySelector({
         );
     }, [deliveryMethods]);
 
-    const productDeliveryMethods = useQuery({
-        queryKey: ['productDeliveryMethods'],
-        queryFn: fetchProductDeliveryMethods,
-    });
+    useEffect(() => {
+        setDeliveryMethods(
+            productDeliveryMethods.data
+                ?.filter((pdm) =>
+                    checkedDeliveryMethods?.some(
+                        (dm) => dm.deliveryTypeId === pdm.deliveryTypeId
+                    )
+                )
+                .map((i) => i.deliveryName) ?? []
+        );
+    }, [productDeliveryMethods.data]);
 
     const handleChange = ({
         target,

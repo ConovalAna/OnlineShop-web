@@ -37,9 +37,9 @@ export default function ProductFields({
         },
         validationSchema: Yup.object({
             name: Yup.string().max(562).required('Product name is required'),
-            provider: Yup.string()
-                .max(100)
-                .required('Product provider is required'),
+            // provider: Yup.string()
+            //     .max(100)
+            //     .required('Product provider is required'),
             descriptions: Yup.string()
                 .max(1000)
                 .required('Product descriptions is required'),
@@ -105,7 +105,7 @@ export default function ProductFields({
                                     value={formik.values.name}
                                 />
                             </Grid>
-                            <Grid item xs={6} md={4}>
+                            {/* <Grid item xs={6} md={4}>
                                 <TextField
                                     required
                                     id="provider-input"
@@ -126,7 +126,7 @@ export default function ProductFields({
                                     value={formik.values.provider}
                                     name="provider"
                                 />
-                            </Grid>
+                            </Grid> */}
                             <Grid
                                 item
                                 xs={12}
@@ -135,6 +135,7 @@ export default function ProductFields({
                                 spacing={4}
                             >
                                 <ProductCategorySelector
+                                    prSelectedCategoryId={product?.categoryId}
                                     onChangeCategoryId={(catId) => {
                                         categoryId.current = catId;
                                     }}
@@ -310,6 +311,9 @@ export default function ProductFields({
                             </Grid>
                             <Grid item xs={6} md={4}>
                                 <ProductDeliverySelector
+                                    checkedDeliveryMethods={
+                                        product?.deliveryMethods
+                                    }
                                     onChangeDeliveryMethods={(deliveries) => {
                                         deliveryMethods.current = deliveries;
                                     }}

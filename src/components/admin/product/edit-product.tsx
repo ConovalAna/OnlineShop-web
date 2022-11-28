@@ -9,6 +9,7 @@ import { Typography } from '@mui/material';
 import ProductFields from './product-fields';
 import { useParams } from 'react-router-dom';
 import { useFetchProductQuery } from '../../../api/use-store-api';
+import { editProductAsync } from '../../../api/StoreApi';
 
 export default function EditProduct() {
     let { productId } = useParams();
@@ -17,7 +18,9 @@ export default function EditProduct() {
         const productToSubmit = productModelToIProduct(product);
         productToSubmit.productId = parseInt(productId ?? '0');
         console.log(productToSubmit);
+        editProductAsync(productToSubmit);
     };
+
     return (
         <Box
             component="main"

@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import RemoveIcon from '@mui/icons-material/Delete';
 import { styled, alpha } from '@mui/material/styles';
 import { useProductDeleteMutation } from '../../../api/use-store-api';
+import { useNavigate } from 'react-router-dom';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -55,6 +56,7 @@ export default function ProductActions({ productId }: { productId: number }) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
+    const navigate = useNavigate();
     const { mutate, isLoading } = useProductDeleteMutation();
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,6 +64,10 @@ export default function ProductActions({ productId }: { productId: number }) {
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleEdit = () => {
+        navigate('/products/edit/' + productId);
     };
 
     const onDelete = () => {
@@ -89,7 +95,7 @@ export default function ProductActions({ productId }: { productId: number }) {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose} disableRipple>
+                <MenuItem onClick={handleEdit} disableRipple>
                     <EditIcon />
                     Edit
                 </MenuItem>
