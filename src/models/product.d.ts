@@ -15,7 +15,7 @@ export type ProductModel = {
     provider?: string;
     deliveryMethods?: IDeliveryMethod[];
     stock?: StockModel[];
-    imagesUrl?: string[];
+    imagesUrl?: ImageModel[];
 }
 
 export type StockModel = {
@@ -23,6 +23,10 @@ export type StockModel = {
     quantity: number;
     size: Size;
     color: string;
+}
+export type ImageModel = {
+    productImageId: number;
+    url: string;
 }
 
 export enum Size {
@@ -55,7 +59,15 @@ export const productModelToIProduct = (product: ProductModel): IProduct => {
         barcode: product.barcode ?? '',
         categoryId: product.categoryId ?? 0,
         deliveryTypes: product.deliveryMethods,
-        imagesUrl: ['Test1', 'test'],
+        //imagesUrl: ['Test1', 'test'],
+        imagesUrl: product.imagesUrl?.map((image) => {
+            var s: IImageUrl = {
+                productId: 0,
+                productImageId:image.productImageId,
+                url: image.url,
+            };
+            return s;
+        }) ?? [],
         stocks:
             product.stock?.map((stock) => {
                 var s: IStock = {

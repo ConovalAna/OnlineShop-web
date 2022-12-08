@@ -13,10 +13,15 @@ import FileUpload from 'react-mui-fileuploader';
 import StockTable from './stock-table';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { ProductModel, StockModel } from '../../../models/product.d';
+import {
+    ImageModel,
+    ProductModel,
+    StockModel,
+} from '../../../models/product.d';
 import ProductCategorySelector from './product-category-selector';
 import ProductDeliverySelector from './product-delivery-selector';
 import { IDeliveryMethod } from '../../../api/store-api';
+import ProductImages from './product-images';
 
 interface ProductFieldsProps {
     product?: ProductModel;
@@ -28,6 +33,7 @@ export default function ProductFields({
     ...props
 }: ProductFieldsProps) {
     const [stock, setStock] = React.useState<StockModel[]>([]);
+    const [images, setImages] = React.useState<ImageModel[]>([]);
     const categoryId = useRef(0);
     const deliveryMethods = useRef<IDeliveryMethod[]>([]);
 
@@ -48,7 +54,7 @@ export default function ProductFields({
                 .required('Product meta keywords is required'),
             price: Yup.number().required('Product price is required'),
             discountAmount: Yup.number(),
-            discountPercent: Yup.number(),
+            //discountPercent: Yup.number(),
             vatAmount: Yup.number(),
             barcode: Yup.string()
                 .max(100)
@@ -61,6 +67,7 @@ export default function ProductFields({
                 categoryId: categoryId.current,
                 deliveryMethods: deliveryMethods.current,
                 stock: stock,
+                imagesUrl: images,
             };
             onSubmitCallback(product);
         },
@@ -242,7 +249,7 @@ export default function ProductFields({
                                     value={formik.values.discountAmount}
                                 />
                             </Grid>
-                            <Grid item xs={6} md={4}>
+                            {/* <Grid item xs={6} md={4}>
                                 <TextField
                                     required
                                     id="discount-percent-input"
@@ -263,7 +270,7 @@ export default function ProductFields({
                                     type="number"
                                     value={formik.values.discountPercent}
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item xs={6} md={4}>
                                 <TextField
@@ -336,6 +343,19 @@ export default function ProductFields({
                                         setStock(stock);
                                     }}
                                     initStock={product?.stock}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={12}>
+                                <Typography sx={{ m: 1 }} variant="h5">
+                                    Images
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={12}>
+                                <ProductImages
+                                    onChangeImages={(images) => {
+                                        setImages(images);
+                                    }}
+                                    initImages={product?.imagesUrl}
                                 />
                             </Grid>
 

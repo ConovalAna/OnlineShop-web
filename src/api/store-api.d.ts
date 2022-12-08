@@ -6,6 +6,7 @@ export interface ICategory {
 
 export interface IImageUrl {
     productImageId: number,
+    productId:number,
     url: string
 }
 
@@ -34,7 +35,7 @@ export interface IProduct {
     isDeleted?: boolean,
     created?: string,
     updated?: string,
-    imagesUrl?: string[],
+    imagesUrl?: IImageUrl[],
     stocks?: IStock[],
     category?: ICategory,
     deliveryTypes?: IDeliveryMethod[]

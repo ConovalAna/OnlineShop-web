@@ -19,22 +19,14 @@ import {
     GridEventListener,
     GridRowId,
     GridValidRowModel,
-    GridColDef,
-    GridRenderCellParams,
-    useGridApiContext,
 } from '@mui/x-data-grid-pro';
-import { Size, StockModel } from '../../../models/product.d';
-import { Select, SelectChangeEvent } from '@mui/material';
-import { ToArray } from '../../../utils/helper';
+import Avatar from '@mui/material/Avatar';
+import { ImageModel } from '../../../models/product';
 
-type StockModelRowModel = GridValidRowModel & {
+type ImageModelRowModel = GridValidRowModel & {
     id: number;
-    sizeText: string;
-    quantity: number;
-    color: string;
+    url: string;
 };
-
-const SizeList = ToArray(Size);
 
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -57,9 +49,7 @@ function EditToolbar(props: EditToolbarProps) {
             ...oldRows,
             {
                 id,
-                sizeText: Size.M.toString(),
-                quantity: 1,
-                color: 'purple',
+                url: 'https://avatars.mds.yandex.net/i?id=84dbd50839c3d640ebfc0de20994c30d-4473719-images-taas-consumers&n=27&h=480&w=480',
                 isNew: true,
             },
         ]);
@@ -82,56 +72,21 @@ function EditToolbar(props: EditToolbarProps) {
     );
 }
 
-function SelectEditInputCell(props: GridRenderCellParams) {
-    const { id, value, field } = props;
-    const apiRef = useGridApiContext();
-
-    const handleChange = async (event: SelectChangeEvent) => {
-        await apiRef.current.setEditCellValue({
-            id,
-            field,
-            value: event.target.value,
-        });
-        apiRef.current.stopCellEditMode({ id, field });
-    };
-
-    return (
-        <Select
-            value={value}
-            onChange={handleChange}
-            size="small"
-            sx={{ height: 1 }}
-            native
-            autoFocus
-        >
-            {SizeList.map((size) => (
-                <option>{size}</option>
-            ))}
-        </Select>
-    );
+interface ImagesTableProps {
+    initImages?: ImageModel[];
+    onChangeImages: (images: ImageModel[]) => void;
 }
 
-const renderSelectEditInputCell: GridColDef['renderCell'] = (params) => {
-    return <SelectEditInputCell {...params} />;
-};
-
-interface StockTableProps {
-    initStock?: StockModel[];
-    onChangeStock: (stocks: StockModel[]) => void;
-}
-
-export default function StockTable({
-    initStock,
-    onChangeStock,
-}: StockTableProps) {
-    const [rows, setRows] = React.useState<GridRowsProp<StockModelRowModel>>(
-        initStock?.map((stock) => {
+export default function ProductImages({
+    initImages,
+    onChangeImages,
+}: ImagesTableProps) {
+    const [rows, setRows] = React.useState<GridRowsProp<ImageModelRowModel>>(
+        initImages?.map((image) => {
             const initialRows = {
-                id: stock.id,
-                sizeText: Size[stock.size],
-                quantity: stock.quantity,
-                color: stock.color,
-            } as StockModelRowModel;
+                id: image.productImageId,
+                url: image.url,
+            } as ImageModelRowModel;
             return initialRows;
         }) ?? []
     );
@@ -142,16 +97,14 @@ export default function StockTable({
     const [lastNewId, setLastNewId] = React.useState<number>(0);
 
     useEffect(() => {
-        const stocks = rows.map((row) => {
-            var stock: StockModel = {
-                color: row.color,
-                id: row.id > 0 ? row.id : 0,
-                quantity: row.quantity,
-                size: Size[row.sizeText as keyof typeof Size],
+        const images = rows.map((row) => {
+            var image: ImageModel = {
+                url: row.url,
+                productImageId: row.id > 0 ? row.id : 0,
             };
-            return stock;
+            return image;
         });
-        onChangeStock(stocks);
+        onChangeImages(images);
     }, [rows]);
 
     const handleRowEditStart = (
@@ -168,6 +121,9 @@ export default function StockTable({
         event.defaultMuiPrevented = true;
     };
 
+    const handleDeleteClick = (id: GridRowId) => () => {
+        setRows(rows.filter((row) => row.id !== id));
+    };
     const handleEditClick = (id: GridRowId) => () => {
         setRowModesModel({
             ...rowModesModel,
@@ -182,10 +138,6 @@ export default function StockTable({
         });
     };
 
-    const handleDeleteClick = (id: GridRowId) => () => {
-        setRows(rows.filter((row) => row.id !== id));
-    };
-
     const handleCancelClick = (id: GridRowId) => () => {
         setRowModesModel({
             ...rowModesModel,
@@ -198,7 +150,7 @@ export default function StockTable({
         }
     };
 
-    const processRowUpdate = (newRow: StockModelRowModel) => {
+    const processRowUpdate = (newRow: ImageModelRowModel) => {
         const updatedRow = { ...newRow, isNew: false };
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
         return updatedRow;
@@ -206,29 +158,34 @@ export default function StockTable({
 
     const columns: GridColumns = [
         {
-            field: 'sizeText',
-            headerName: 'Size',
-            width: 180,
-            renderEditCell: renderSelectEditInputCell,
-            editable: true,
+            field: 'image',
+            headerName: 'Image',
+            //type: 'img',
+            editable: false,
+            flex: 0.1,
+            renderCell: (params) => {
+                console.log(params);
+                return (
+                    <strong>
+                        {/* <img src={params.row.url} /> */}
+                        <Avatar src={params.row.url} />
+                    </strong>
+                );
+            },
         },
         {
-            field: 'quantity',
-            headerName: 'Quantity',
-            type: 'number',
-            editable: true,
-        },
-        {
-            field: 'color',
-            headerName: 'Color',
+            field: 'url',
+            headerName: 'URL',
             type: 'string',
             editable: true,
+            flex: 1,
         },
         {
             field: 'actions',
             type: 'actions',
             headerName: 'Actions',
             width: 100,
+            flex: 0.2,
 
             cellClassName: 'actions',
             getActions: ({ id }) => {
