@@ -57,7 +57,10 @@ module.exports = {
         new ModuleNotFoundPlugin(path.resolve(__dirname, '.')),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin({
-            patterns: [{ from: 'src/asset', to: 'asset' }],
+            patterns: [
+                { from: 'src/asset', to: 'asset' },
+                { from: 'src/images', to: 'images' },
+            ],
         }),
     ],
 };

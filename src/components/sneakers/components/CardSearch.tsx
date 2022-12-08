@@ -1,24 +1,24 @@
 import React from 'react';
-// import searchImg from '../images/search.svg';
-// import remove_button from '../images/remove-button.svg';
+const searchImg = '/asset/sneakers/search.svg';
+const remove_button = '/asset/sneakers/remove-button.svg';
 
 function CardSearch({ search, setSearch }: any) {
     return (
         <div className="store__search">
-            <img className="store__search-image" src={''} alt="Лупа" />
+            <img className="store__search-image" src={searchImg} alt="Find" />
             <input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 className="store__input"
                 type="text"
-                placeholder="Поиск..."
+                placeholder="Search..."
             ></input>
             <button className="close-button close-button_type_input">
                 <img
                     className="close-button__image"
                     onClick={() => setSearch('')}
-                    src={''}
-                    alt="Крестик"
+                    src={remove_button}
+                    alt="Close"
                 />
             </button>
         </div>

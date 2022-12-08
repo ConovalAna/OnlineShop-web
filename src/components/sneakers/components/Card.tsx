@@ -1,9 +1,9 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
-// import plusAdded from '../images/button-added.svg';
-// import plusDefault from '../images/button-plus.svg';
-// import heartDefault from '../images/heart-default.svg';
-// import heartLiked from '../images/heart-liked.svg';
+const plusDefault = '/asset/sneakers/button-plus.svg';
+const plusAdded = '/asset/sneakers/button-added.svg';
+const heartLiked = '/asset/sneakers/heart-liked.svg';
+const heartDefault = '/asset/sneakers/heart-default.svg';
 
 function Card({
     card,
@@ -18,7 +18,7 @@ function Card({
 
     return (
         <li className="card">
-            {isLoading ? ( // отображаем скелетон, если в текущий момент идет загрузка
+            {isLoading ? (
                 <ContentLoader
                     speed={1}
                     width={200}
@@ -62,10 +62,9 @@ function Card({
                                     // )
                                     //     ? heartLiked
                                     //     :
-                                    //heartDefault
-                                    ''
+                                    heartDefault
                                 }
-                                alt="Серое сердце"
+                                alt="Empty heart"
                             />
                         </button>
                     )}
@@ -80,7 +79,7 @@ function Card({
                         <div className="card__price">
                             <p className="card__price-title">Цена:</p>
                             <p className="card__price-value">
-                                {card.price} руб.
+                                {card.price} RON.
                             </p>
                         </div>
                         <button className="card-button">
@@ -95,10 +94,9 @@ function Card({
                                         // )
                                         //     ? plusAdded
                                         //     :
-                                        // plusDefault
-                                        ''
+                                        plusDefault
                                     }
-                                    alt="Плюс"
+                                    alt="plus"
                                 />
                             )}
                         </button>

@@ -1,12 +1,5 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-//import { useCheckout } from '../hooks/useCheckout';
-// import cart from '../images/cart.svg';
-// import exit from '../images/exit.svg';
-// import favorite from '../images/favorite.svg';
-// import logo from '../images/logo.png';
-// import profile from '../images/profile.svg';
-
 function Header({ onOpenCart, email }: any) {
     //const { itemsPrice } = useCheckout();
 
@@ -20,11 +13,15 @@ function Header({ onOpenCart, email }: any) {
             <div className="header__content">
                 <NavLink to="/">
                     <div className="header__logo">
-                        <img className="logo" src={''} alt="Кроссовки" />
+                        <img
+                            className="logo"
+                            src="/asset/resource/logo.png"
+                            alt="Sneakers"
+                        />
                         <div className="header__logo-text">
                             <h1 className="header__title">React Sneakers</h1>
                             <p className="header__subtitle">
-                                Магазин лучших кроссовок
+                                Store with best sneakers
                             </p>
                         </div>
                     </div>
@@ -33,11 +30,11 @@ function Header({ onOpenCart, email }: any) {
                     <li onClick={onOpenCart} className="header__cart">
                         <img
                             className="header__cart-image"
-                            src={''}
-                            alt="Корзина"
+                            src="/asset/sneakers/cart.svg"
+                            alt="Cart"
                         />
                         <span className="header__price">
-                            {/* {itemsPrice}  */}0 руб.
+                            {/* {itemsPrice}  */}0 RON.
                         </span>
                     </li>
                     <NavLink
@@ -47,8 +44,8 @@ function Header({ onOpenCart, email }: any) {
                         <li>
                             <img
                                 className="header__icon"
-                                src={''}
-                                alt="Человек"
+                                src="/asset/sneakers/profile.svg"
+                                alt="Profile"
                             />
                         </li>
                     </NavLink>
@@ -59,8 +56,8 @@ function Header({ onOpenCart, email }: any) {
                         <li>
                             <img
                                 className="header__icon"
-                                src={''}
-                                alt="Сердце"
+                                src="/asset/sneakers/favorite.svg"
+                                alt="Heart"
                             />
                         </li>
                     </NavLink>
@@ -68,8 +65,8 @@ function Header({ onOpenCart, email }: any) {
                         <img
                             onClick={logout}
                             className="header__icon"
-                            src={''}
-                            alt="Выход"
+                            src="/asset/sneakers/exit.svg"
+                            alt="Exit"
                         />
                     </li>
                 </ul>

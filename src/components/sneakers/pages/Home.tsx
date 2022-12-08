@@ -4,6 +4,7 @@ import CardSearch from '../components/CardSearch';
 import Header from '../components/Header';
 import Message from '../components/Message';
 import Select from '../components/UI/Select';
+import { createArrWithEmptyObjs, getRandomNumber } from '../utils/pages';
 
 function Home({
     searchQuery,
@@ -18,11 +19,11 @@ function Home({
     sortItems,
     email,
 }: any) {
-    //const [numberForEmoji, setNumberForEmoji] = useState(1);
+    const [numberForEmoji, setNumberForEmoji] = useState(1);
 
-    //useEffect(() => setNumberForEmoji(getRandomNumber(1, 10)), [searchQuery]);
+    useEffect(() => setNumberForEmoji(getRandomNumber(1, 10)), [searchQuery]);
 
-    //const arrayWithEmptyObjs = createArrWithEmptyObjs(cardsCount); // создаем массив из пустых объектов для загрузки
+    const arrayWithEmptyObjs = createArrWithEmptyObjs(cardsCount); // создаем массив из пустых объектов для загрузки
 
     return (
         <div className="page__wrapper">
@@ -31,8 +32,8 @@ function Home({
                 <div className="store__header">
                     <h2 className="store__title">
                         {searchQuery
-                            ? `Поиск по: ${searchQuery}`
-                            : 'Все кроссовки'}
+                            ? `Search by: ${searchQuery}`
+                            : 'All Sneakers'}
                     </h2>
                     <CardSearch
                         search={searchQuery}
@@ -41,24 +42,20 @@ function Home({
                     <Select
                         value={selectedSort}
                         onChange={sortItems}
-                        defaultValue="Сортировка"
+                        defaultValue="Sorting"
                         options={[
-                            { value: 'descending', name: 'По убыванию' },
-                            { value: 'ascending', name: 'По возрастанию' },
+                            { value: 'descending', name: 'Descending' },
+                            { value: 'ascending', name: 'Ascending' },
                         ]}
                     />
                 </div>
                 {searchedCards.length === 0 && searchQuery ? (
                     <Message
-                        img={
-                            ''
-                            // process.env.PUBLIC_URL +
-                            // `/images/emoji/emoji-${numberForEmoji}.png`
-                        }
-                        title="Нет результатов"
-                        subtitle="Попробуйте найти что-нибудь другое"
+                        img={`/images/emoji/emoji-${numberForEmoji}.png`}
+                        title="No results"
+                        subtitle="Try to find something else"
                         removeButton="true"
-                        alt="Смайлик"
+                        alt="Smail"
                     />
                 ) : (
                     <CardList
