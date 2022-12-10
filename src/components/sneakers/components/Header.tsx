@@ -1,5 +1,5 @@
 import { useAuth } from '../../../common/auth.hook';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { RootState } from '../../../store';
@@ -18,7 +18,7 @@ function Header() {
         setIsCartOpened(true);
     };
     const logout = () => {
-        localStorage.removeItem('token');
+        auth?.logout();
     };
 
     const [openLogin, setOpenLogin] = React.useState(false);
@@ -30,6 +30,11 @@ function Header() {
     const handleCloseLogin = () => {
         setOpenLogin(false);
     };
+
+    useEffect(() => {
+        if (auth?.user) handleCloseLogin();
+    }, [auth?.user]);
+
     return (
         <header className="header">
             <Cart
@@ -61,9 +66,7 @@ function Header() {
                         />
                         <span className="header__price">{amount} ron.</span>
                     </li>
-                    <NavLink
-                        to="/orders"
-                    >
+                    {auth?.user && <NavLink to="/orders">
                         <li>
                             <img
                                 className="header__icon"
@@ -71,10 +74,8 @@ function Header() {
                                 alt="Profile"
                             />
                         </li>
-                    </NavLink>
-                    <NavLink
-                        to="/sneakers/favorite"
-                    >
+                    </NavLink>}
+                    <NavLink to="/sneakers/favorite">
                         <li>
                             <img
                                 className="header__icon"
@@ -85,7 +86,7 @@ function Header() {
                     </NavLink>
                     <li>
                         <img
-                            onClick={handleClickOpenLogin}
+                            onClick={auth?.user ? logout: handleClickOpenLogin}
                             className="header__icon"
                             src="/asset/sneakers/exit.svg"
                             alt="Exit"
@@ -93,18 +94,17 @@ function Header() {
                     </li>
                 </ul>
             </div>
-           {auth?.user && <p className="header__email">{auth?.user?.email}</p>} 
-           <Dialog
-                        fullWidth={true}
-                        maxWidth={'xs'}
-                        open={openLogin}
-                        onClose={handleCloseLogin}
-                    >
-                        <DialogContent>
-                                <LoginPopup  />
-                        </DialogContent>
-                     
-                    </Dialog>
+            {auth?.user && <p className="header__email">{auth?.user?.email}</p>}
+            <Dialog
+                fullWidth={true}
+                maxWidth={'xs'}
+                open={openLogin}
+                onClose={handleCloseLogin}
+            >
+                <DialogContent>
+                    <LoginPopup />
+                </DialogContent>
+            </Dialog>
         </header>
     );
 }

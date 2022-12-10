@@ -25,10 +25,10 @@ function Message({
                 >
                     <img
                         className="button__left-arrow"
-                        src={''}
-                        alt="Стрелка"
+                        src={'asset/sneakers/left-arrow.svg'}
+                        alt="Arrow"
                     />
-                    Вернуться назад
+                    Go Back
                 </Button>
             )}
         </div>

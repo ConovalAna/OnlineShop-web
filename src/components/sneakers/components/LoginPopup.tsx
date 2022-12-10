@@ -3,29 +3,39 @@ import InputWithError from '../components/UI/InputWithError';
 const logo = 'asset/sneakers/logo.png';
 import { Link } from 'react-router-dom';
 import useFormAndValidation from '../hooks/useFormAndValidation';
-import { useCustomSignInWithEmailAndPassword } from '../../../common/auth.hook';
+import {
+    useAuth,
+    useCustomSignInWithEmailAndPassword,
+} from '../../../common/auth.hook';
+import { Button } from '@mui/material';
+import { Google as GoogleIcon } from '../../../asset/inline/icons/google';
 
 function LoginPopup() {
+    const auth = useAuth();
+
     const { handleChange, values, errors, isFormValid, resetForm } =
         useFormAndValidation();
 
     const [signInWithEmailAndPassword, user, loading, error] =
         useCustomSignInWithEmailAndPassword();
 
-
     const [isLoginState, setisLoginState] = useState(true);
 
     const login = (event: any) => {
         event.preventDefault();
-        if (!values["password"] || !values["email"]) {
-          return;
+        if (!values['password'] || !values['email']) {
+            return;
         }
         // onSubmit(values["password"], values["email"], resetForm);
 
-        signInWithEmailAndPassword(
-          values["email"],
-          values["password"]
-      );
+        signInWithEmailAndPassword(values['email'], values['password']);
+    };
+
+    const register = () => {
+        if (!values['password'] || !values['email']) {
+            return;
+        }
+        auth?.signupLocal(values['email'], values['email'], values['password']);
     };
 
     const handleSubmit = () => {};
@@ -36,7 +46,7 @@ function LoginPopup() {
                 <img
                     className="logo logo_type_login"
                     src={logo}
-                    alt="Кроссовки"
+                    alt="Sneakers"
                 />
                 <h1 className="login__title">Login</h1>
                 <InputWithError
@@ -69,8 +79,19 @@ function LoginPopup() {
                 >
                     {loading ? 'Loading...' : 'Login'}
                 </button>
+                <Button
+                    fullWidth
+                    color="error"
+                    className="button_type_login"
+                    startIcon={<GoogleIcon />}
+                    onClick={() => auth?.loginWithGoogle()}
+                    size="large"
+                    variant="contained"
+                >
+                    Login with Google
+                </Button>
                 <p className="login__text">
-                    No account?{' '}
+                    No account?
                     <a
                         className="login__link"
                         onClick={() => setisLoginState(false)}
@@ -130,9 +151,21 @@ function LoginPopup() {
                         isFormValid ? '' : 'button_type_disabled'
                     }`}
                     disabled={!isFormValid}
+                    onClick={register}
                 >
                     {loading ? 'Loading...' : 'Create account'}
                 </button>
+                <Button
+                    fullWidth
+                    color="error"
+                    className="button_type_login"
+                    startIcon={<GoogleIcon />}
+                    onClick={() => auth?.loginWithGoogle()}
+                    size="large"
+                    variant="contained"
+                >
+                    Register with Google
+                </Button>
                 <p className="login__text">
                     Already have account
                     <a
