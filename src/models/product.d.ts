@@ -15,7 +15,7 @@ export type ProductModel = {
     provider?: string;
     deliveryMethods?: IDeliveryMethod[];
     stock?: StockModel[];
-    imagesUrl?: ImageModel[];
+    imagesUrl?: string[];
 }
 
 export type StockModel = {

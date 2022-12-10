@@ -21,7 +21,6 @@ import {
     GridValidRowModel,
 } from '@mui/x-data-grid-pro';
 import Avatar from '@mui/material/Avatar';
-import { ImageModel } from '../../../models/product';
 
 type ImageModelRowModel = GridValidRowModel & {
     id: number;
@@ -49,7 +48,7 @@ function EditToolbar(props: EditToolbarProps) {
             ...oldRows,
             {
                 id,
-                url: 'https://avatars.mds.yandex.net/i?id=84dbd50839c3d640ebfc0de20994c30d-4473719-images-taas-consumers&n=27&h=480&w=480',
+                url: '',
                 isNew: true,
             },
         ]);
@@ -73,8 +72,8 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 interface ImagesTableProps {
-    initImages?: ImageModel[];
-    onChangeImages: (images: ImageModel[]) => void;
+    initImages?: string[];
+    onChangeImages: (images: string[]) => void;
 }
 
 export default function ProductImages({
@@ -82,10 +81,10 @@ export default function ProductImages({
     onChangeImages,
 }: ImagesTableProps) {
     const [rows, setRows] = React.useState<GridRowsProp<ImageModelRowModel>>(
-        initImages?.map((image) => {
+        initImages?.map((image, index) => {
             const initialRows = {
-                id: image.productImageId,
-                url: image.url,
+                id: index,
+                url: image,
             } as ImageModelRowModel;
             return initialRows;
         }) ?? []
@@ -94,15 +93,11 @@ export default function ProductImages({
         {}
     );
 
-    const [lastNewId, setLastNewId] = React.useState<number>(0);
+    const [lastNewId, setLastNewId] = React.useState<number>(initImages?.length ?? 0);
 
     useEffect(() => {
         const images = rows.map((row) => {
-            var image: ImageModel = {
-                url: row.url,
-                productImageId: row.id > 0 ? row.id : 0,
-            };
-            return image;
+            return row.url;
         });
         onChangeImages(images);
     }, [rows]);

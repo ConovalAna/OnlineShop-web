@@ -33,7 +33,7 @@ export default function ProductFields({
     ...props
 }: ProductFieldsProps) {
     const [stock, setStock] = React.useState<StockModel[]>([]);
-    const [images, setImages] = React.useState<ImageModel[]>([]);
+    const [images, setImages] = React.useState<string[]>([]);
     const categoryId = useRef(0);
     const deliveryMethods = useRef<IDeliveryMethod[]>([]);
 
@@ -365,12 +365,12 @@ export default function ProductFields({
                                     variant="fullWidth"
                                 />
                             </Grid>
-                            <Grid item xs={12} md={12}>
+                            {/* <Grid item xs={12} md={12}>
                                 <Typography sx={{ m: 1 }} variant="h5">
                                     Product images
                                 </Typography>
-                            </Grid>
-                            <Grid item xs={12} md={12}>
+                            </Grid> */}
+                            {/* <Grid item xs={12} md={12}>
                                 <FileUpload
                                     multiFile={true}
                                     disabled={false}
@@ -401,7 +401,7 @@ export default function ProductFields({
                                         variant: 'outlined',
                                     }}
                                 />
-                            </Grid>
+                            </Grid> */}
                             <Grid
                                 item
                                 xs={12}
