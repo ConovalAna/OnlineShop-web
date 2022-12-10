@@ -10,6 +10,7 @@ import React from 'react';
 import ContentLoader from 'react-content-loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { getProductImagesAsync } from '../../../api/StoreApi';
 import { addToFavorite } from '../../../store/favorite/favoriteSlice';
 import CardPopupInfo from './CardPopupInfo';
 
@@ -19,11 +20,7 @@ const heartLiked = '/asset/sneakers/heart-liked.svg';
 const heartDefault = '/asset/sneakers/heart-default.svg';
 import { addToCart } from '../../../store/cart/cartSlice';
 
-function Card({
-    card,
-    onAddToFavorites,
-    isLoading,
-}: any) {
+function Card({ card, onAddToFavorites, isLoading }: any) {
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const favoriteItems = useSelector(
@@ -131,7 +128,7 @@ function Card({
                     >
                         <DialogTitle>{card.name}</DialogTitle>
                         <DialogContent>
-                                <CardPopupInfo card={card} />
+                            <CardPopupInfo card={(card, images)} />
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Close</Button>
