@@ -13,6 +13,7 @@ import AddProduct from '../components/admin/product/add-product';
 import EditProduct from '../components/admin/product/edit-product';
 import Sneakers from '../components/sneakers';
 import Favorites from '../components/sneakers/components/Favorites';
+import Cart from '../components/sneakers/components/Cart';
 
 const Routing = () => (
     <Router>
@@ -31,6 +32,7 @@ const Routing = () => (
             <Route path="/sneakers" element={<UnauthenticatedRoute />}>
                 <Route path="/sneakers" element={<Sneakers />} />
                 <Route path="/sneakers/favorite" element={<Favorites />} />
+                <Route path="/sneakers/cart" element={<Cart />} />
             </Route>
             <Route path="/login" element={<UnauthenticatedRoute />}>
                 <Route path="/login" element={<LoginPage />} />

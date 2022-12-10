@@ -10,7 +10,6 @@ function Home({
     searchQuery,
     setSearchQuery,
     searchedCards,
-    onAddToCart,
     onAddToFavorites,
     onOpenCart,
     isLoading,
