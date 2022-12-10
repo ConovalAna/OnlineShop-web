@@ -11,7 +11,8 @@ import {
     useSignInWithEmailAndPassword,
     EmailAndPasswordActionHook,
 } from 'react-firebase-hooks/auth';
-
+import { clearCart } from '../store/cart/cartSlice';
+import { useDispatch } from 'react-redux';
 export type AuthType = {
     user: User | undefined | null;
     loadingProfile: boolean;
@@ -39,6 +40,7 @@ export function useCustomSignInWithEmailAndPassword(): EmailAndPasswordActionHoo
 
 function useProvideAuth(): AuthType {
     const [user, loading, error] = useAuthState(auth);
+    const dispatch = useDispatch()
     //     firebase.auth().currentUser.getIdToken(/ forceRefresh / true)
     // .then(function(idToken) {
 
@@ -65,6 +67,7 @@ function useProvideAuth(): AuthType {
         loginWithGoogle,
         logout: () => {
             logout();
+            dispatch(clearCart());
         },
     };
 }

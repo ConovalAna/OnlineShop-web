@@ -40,10 +40,14 @@ export const cartSlice = createSlice({
             state.cartItems.forEach((cartItem) => (sum += cartItem.price));
             state.amount = sum;
         },
+        clearCart: (state) => {
+            state.cartItems = [];
+            state.amount = 0;
+        },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart , clearCart} = cartSlice.actions;
 
 export default cartSlice.reducer;
