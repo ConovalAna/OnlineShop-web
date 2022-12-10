@@ -10,7 +10,6 @@ import React from 'react';
 import ContentLoader from 'react-content-loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { getProductImagesAsync } from '../../../api/StoreApi';
 import { addToFavorite } from '../../../store/favorite/favoriteSlice';
 import CardPopupInfo from './CardPopupInfo';
 
@@ -128,7 +127,7 @@ function Card({ card, onAddToFavorites, isLoading }: any) {
                     >
                         <DialogTitle>{card.name}</DialogTitle>
                         <DialogContent>
-                            <CardPopupInfo card={(card, images)} />
+                            <CardPopupInfo card={card} />
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Close</Button>

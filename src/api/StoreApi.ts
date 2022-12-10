@@ -43,10 +43,6 @@ export function getFavoriteAsync(userId: number): Promise<IProduct> {
     return StoreApi.Instance.GetFavorite(userId);
 }
 
-export function getProductImagesAsync(productId: number): Promise<IProduct> {
-    return StoreApi.Instance.GetProductImages(productId);
-}
-
 class StoreApi extends APIClient {
     private static _instance: StoreApi;
     private constructor() {
@@ -107,10 +103,4 @@ class StoreApi extends APIClient {
         const response = await this.doGET(`products/favorite/${userId}`, {});
         return response;
     }
-
-    async GetProductImages(userId: number): Promise<any> {
-        const response = await this.doGET(`products/favorite/${userId}`, {});
-        return response;
-    }
-
 }
