@@ -60,14 +60,7 @@ export const productModelToIProduct = (product: ProductModel): IProduct => {
         categoryId: product.categoryId ?? 0,
         deliveryTypes: product.deliveryMethods,
         //imagesUrl: ['Test1', 'test'],
-        imagesUrl: product.imagesUrl?.map((image) => {
-            var s: IImageUrl = {
-                productId: 0,
-                productImageId:image.productImageId,
-                url: image.url,
-            };
-            return s;
-        }) ?? [],
+        imagesUrl: product.imagesUrl ?? [],
         stocks:
             product.stock?.map((stock) => {
                 var s: IStock = {
