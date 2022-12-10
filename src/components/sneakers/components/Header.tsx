@@ -1,10 +1,14 @@
+import { useAuth } from '../../../common/auth.hook';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { RootState } from '../../../store';
 import Cart from './Cart';
+import { Dialog, DialogContent } from '@mui/material';
+import LoginPopup from './LoginPopup';
 function Header() {
-    const email = 'simpleuser@email.com';
+    const auth = useAuth();
+
     const amount = useSelector((state: RootState) => state.cart.amount);
     const [isCartOpened, setIsCartOpened] = useState(false);
     const cartCloseHandler = () => {
@@ -17,6 +21,15 @@ function Header() {
         localStorage.removeItem('token');
     };
 
+    const [openLogin, setOpenLogin] = React.useState(false);
+
+    const handleClickOpenLogin = () => {
+        setOpenLogin(true);
+    };
+
+    const handleCloseLogin = () => {
+        setOpenLogin(false);
+    };
     return (
         <header className="header">
             <Cart
@@ -50,7 +63,6 @@ function Header() {
                     </li>
                     <NavLink
                         to="/orders"
-                        //activeClassName="header__link_active"
                     >
                         <li>
                             <img
@@ -62,7 +74,6 @@ function Header() {
                     </NavLink>
                     <NavLink
                         to="/sneakers/favorite"
-                        //activeClassName="header__link_active"
                     >
                         <li>
                             <img
@@ -74,7 +85,7 @@ function Header() {
                     </NavLink>
                     <li>
                         <img
-                            onClick={logout}
+                            onClick={handleClickOpenLogin}
                             className="header__icon"
                             src="/asset/sneakers/exit.svg"
                             alt="Exit"
@@ -82,7 +93,18 @@ function Header() {
                     </li>
                 </ul>
             </div>
-            <p className="header__email">{email}</p>
+           {auth?.user && <p className="header__email">{auth?.user?.email}</p>} 
+           <Dialog
+                        fullWidth={true}
+                        maxWidth={'xs'}
+                        open={openLogin}
+                        onClose={handleCloseLogin}
+                    >
+                        <DialogContent>
+                                <LoginPopup  />
+                        </DialogContent>
+                     
+                    </Dialog>
         </header>
     );
 }

@@ -93,6 +93,7 @@ function Card({ card, onAddToFavorites, isLoading }: any) {
                         className="card__image"
                         src={card.imagesUrl[0]}
                         alt={card.name}
+                         onClick={handleClickOpen}
                     />
                     <p className="card__title">{card.name}</p>
                     <div className="card__buy">

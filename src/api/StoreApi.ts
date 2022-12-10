@@ -1,4 +1,3 @@
-import { threadId } from "worker_threads";
 import APIClient from "./api";
 import { ICategory, IDeliveryMethod, IProduct } from "./store-api";
 
