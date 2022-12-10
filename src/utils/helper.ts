@@ -7,3 +7,8 @@ export function ToArray(enumme: any) {
         .filter(StringIsNumber)
         .map((key) => enumme[key]);
 }
+
+export function IsInFavoriteList(favoriteList: any, element: any) {
+    return favoriteList.some((item: any) => item.customId === element.customId);
+    return true;
+}

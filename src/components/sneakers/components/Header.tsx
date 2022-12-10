@@ -50,7 +50,7 @@ function Header({ onOpenCart, email }: any) {
                         </li>
                     </NavLink>
                     <NavLink
-                        to="/favorites"
+                        to="/sneakers/favorite"
                         //activeClassName="header__link_active"
                     >
                         <li>

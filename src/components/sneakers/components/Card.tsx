@@ -7,6 +7,8 @@ const plusAdded = '/asset/sneakers/button-added.svg';
 const heartLiked = '/asset/sneakers/heart-liked.svg';
 const heartDefault = '/asset/sneakers/heart-default.svg';
 import { addToCart } from '../../../store/cart/cartSlice';
+import { addToFavorite } from '../../../store/favorite/favoriteSlice';
+import { IsInFavoriteList } from '../../../utils/helper';
 
 function Card({
     card,
@@ -16,9 +18,12 @@ function Card({
 }: any) {
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    const favoriteItems = useSelector(
+        (state: RootState) => state.favorite.favoriteItems
+    );
 
     const cartHandler = () => dispatch(addToCart(card));
-    const favoriteHandler = () => onAddToFavorites(card);
+    const favoriteHandler = () => dispatch(addToFavorite(card));
     //const { openImagePopup, favoriteItems, cartItems } = useContext(AppContext);
 
     return (
@@ -60,14 +65,12 @@ function Card({
                                 onClick={favoriteHandler}
                                 className="card-button__image"
                                 src={
-                                    // (isOnFavoritesPage && heartLiked) ||
-                                    // favoriteItems.some(
-                                    //     (item) =>
-                                    //         item.customId === card.customId
-                                    // )
-                                    //     ? heartLiked
-                                    //     :
-                                    heartDefault
+                                    favoriteItems.some(
+                                        (item) =>
+                                            item.customId === card.customId
+                                    )
+                                        ? heartLiked
+                                        : heartDefault
                                 }
                                 alt="Empty heart"
                             />
