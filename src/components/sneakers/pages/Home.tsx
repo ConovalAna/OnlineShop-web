@@ -63,7 +63,6 @@ function Home({
                             // isLoading ? arrayWithEmptyObjs : searchedCards
                             searchedCards
                         }
-                        onAddToCart={onAddToCart}
                         onAddToFavorites={onAddToFavorites}
                         isLoading={isLoading}
                     />

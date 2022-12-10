@@ -1,18 +1,23 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 const plusDefault = '/asset/sneakers/button-plus.svg';
 const plusAdded = '/asset/sneakers/button-added.svg';
 const heartLiked = '/asset/sneakers/heart-liked.svg';
 const heartDefault = '/asset/sneakers/heart-default.svg';
+import { addToCart } from '../../../store/cart/cartSlice';
 
 function Card({
     card,
-    onAddToCart,
     onAddToFavorites,
     isOnFavoritesPage = false,
     isLoading,
 }: any) {
-    const cartHandler = () => onAddToCart(card);
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
+    const cartHandler = () => dispatch(addToCart(card));
     const favoriteHandler = () => onAddToFavorites(card);
     //const { openImagePopup, favoriteItems, cartItems } = useContext(AppContext);
 
@@ -77,28 +82,25 @@ function Card({
                     <p className="card__title">{card.title}</p>
                     <div className="card__buy">
                         <div className="card__price">
-                            <p className="card__price-title">Цена:</p>
+                            <p className="card__price-title">Price:</p>
                             <p className="card__price-value">
                                 {card.price} RON.
                             </p>
                         </div>
                         <button className="card-button">
-                            {onAddToCart && (
-                                <img
-                                    onClick={cartHandler}
-                                    className="card-button__image"
-                                    src={
-                                        // cartItems.some(
-                                        //     (item) =>
-                                        //         item.customId === card.customId
-                                        // )
-                                        //     ? plusAdded
-                                        //     :
-                                        plusDefault
-                                    }
-                                    alt="plus"
-                                />
-                            )}
+                            <img
+                                onClick={cartHandler}
+                                className="card-button__image"
+                                src={
+                                    cartItems.some(
+                                        (item) =>
+                                            item.customId === card.customId
+                                    )
+                                        ? plusAdded
+                                        : plusDefault
+                                }
+                                alt="plus"
+                            />
                         </button>
                     </div>
                 </>

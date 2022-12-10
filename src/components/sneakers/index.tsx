@@ -68,7 +68,6 @@ export default function Sneakers() {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             searchedCards={searchedCards}
-            onAddToCart={() => {}}
             onAddToFavorites={() => {}}
             onOpenCart={() => {}}
             isLoading={isLoading}
