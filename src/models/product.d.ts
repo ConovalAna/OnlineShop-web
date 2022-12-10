@@ -21,28 +21,12 @@ export type ProductModel = {
 export type StockModel = {
     id: number;
     quantity: number;
-    size: Size;
+    size: number;
     color: string;
 }
 export type ImageModel = {
     productImageId: number;
     url: string;
-}
-
-export enum Size {
-    XXXS = 1,
-    XXS,
-    XS,
-    S,
-    M,
-    L,
-    XL,
-    XXL,
-    XXXL,
-    XXXXL,
-    XXXXXL,
-    XXXXXXL,
-    XXXXXXXL
 }
 
 export enum DeliveryMethod { EasyBox, GLS }

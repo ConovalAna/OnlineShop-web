@@ -23,7 +23,7 @@ import {
     GridRenderCellParams,
     useGridApiContext,
 } from '@mui/x-data-grid-pro';
-import { Size, StockModel } from '../../../models/product.d';
+import { StockModel } from '../../../models/product.d';
 import { Select, SelectChangeEvent } from '@mui/material';
 import { ToArray } from '../../../utils/helper';
 
@@ -34,7 +34,12 @@ type StockModelRowModel = GridValidRowModel & {
     color: string;
 };
 
-const SizeList = ToArray(Size);
+const SizeList = Array.from(
+    {
+        length: 20,
+    },
+    (v, k) => k + 1
+);
 
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -57,7 +62,7 @@ function EditToolbar(props: EditToolbarProps) {
             ...oldRows,
             {
                 id,
-                sizeText: Size.M.toString(),
+                sizeText: 20,
                 quantity: 1,
                 color: 'purple',
                 isNew: true,
@@ -128,7 +133,7 @@ export default function StockTable({
         initStock?.map((stock) => {
             const initialRows = {
                 id: stock.id,
-                sizeText: Size[stock.size],
+                sizeText: `${stock.size}`,
                 quantity: stock.quantity,
                 color: stock.color,
             } as StockModelRowModel;
@@ -147,7 +152,7 @@ export default function StockTable({
                 color: row.color,
                 id: row.id > 0 ? row.id : 0,
                 quantity: row.quantity,
-                size: Size[row.sizeText as keyof typeof Size],
+                size: parseInt(row.sizeText),
             };
             return stock;
         });

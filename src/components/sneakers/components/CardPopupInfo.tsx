@@ -13,14 +13,35 @@ import Carousel from 'react-material-ui-carousel';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { addToCart } from '../../../store/cart/cartSlice';
 import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 export default function CardPopupInfo({ card }: any) {
     const [size, setSize] = React.useState('');
+    const [sizeStock, setSizeStock] = React.useState({
+        stockSize: 0,
+        stockCount: 0,
+    });
     const [count, setCount] = React.useState('');
+    const [sizes, setSizes] = React.useState([]);
+
+    useEffect(() => {
+        const sizes2 = card.stocks.map((stock: any) => {
+            let stockSize = stock.size;
+            let stockCount = stock.quantity;
+            return { stockSize: stockSize, stockCount: stockCount };
+        });
+        setSizes(sizes2);
+        console.log(sizes2);
+    }, []);
 
     const handleChange = (event: SelectChangeEvent) => {
         setSize(event.target.value as string);
-        console.log(card);
+        let correctSize = sizes.find(
+            (size: any) => size.stockSize == (event.target.value as string)
+        );
+        if (correctSize) setSizeStock(correctSize);
+        setCount('');
+        console.log(correctSize);
     };
 
     const handleChangeCount = (event: SelectChangeEvent) => {
@@ -64,14 +85,7 @@ export default function CardPopupInfo({ card }: any) {
                                 <hr className="divider" />
                             </Grid>
                             <Grid item xs={12}>
-                                <Box
-                                    sx={{
-                                        minWidth: 70,
-                                        maxWidth: 120,
-                                    }}
-                                >
-                                    <p>{card.description}</p>
-                                </Box>
+                                <p>{card.descriptions}</p>
                             </Grid>
                             <Grid item xs={12}>
                                 <hr className="divider" />
@@ -97,9 +111,16 @@ export default function CardPopupInfo({ card }: any) {
                                             label="Size"
                                             onChange={handleChange}
                                         >
-                                            <MenuItem value={10}>10</MenuItem>
+                                            {sizes.map((size1: any) => (
+                                                <MenuItem
+                                                    value={size1.stockSize}
+                                                >
+                                                    {size1.stockSize}
+                                                </MenuItem>
+                                            ))}
+                                            {/* <MenuItem value={10}>10</MenuItem>
                                             <MenuItem value={20}>20</MenuItem>
-                                            <MenuItem value={30}>30</MenuItem>
+                                            <MenuItem value={30}>30</MenuItem> */}
                                         </Select>
                                     </FormControl>
                                 </Box>
@@ -121,9 +142,19 @@ export default function CardPopupInfo({ card }: any) {
                                             label="Count"
                                             onChange={handleChangeCount}
                                         >
-                                            <MenuItem value={10}>1</MenuItem>
+                                            {Array.from(
+                                                {
+                                                    length: sizeStock.stockCount,
+                                                },
+                                                (v, k) => k + 1
+                                            ).map((quantity: any) => (
+                                                <MenuItem value={quantity}>
+                                                    {quantity}
+                                                </MenuItem>
+                                            ))}
+                                            {/* <MenuItem value={10}>1</MenuItem>
                                             <MenuItem value={20}>2</MenuItem>
-                                            <MenuItem value={30}>3</MenuItem>
+                                            <MenuItem value={30}>3</MenuItem> */}
                                         </Select>
                                     </FormControl>
                                 </Box>
