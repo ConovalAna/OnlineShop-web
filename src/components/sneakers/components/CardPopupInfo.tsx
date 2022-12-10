@@ -35,24 +35,8 @@ export default function CardPopupInfo({ card, images }: any) {
                         maxHeight: { xs: 350, md: 350 },
                     }}
                     alt={card.title}
-                    src={card.imgUrl}
-                /> */}
-                {/* <Carousel>
-                    {() => {
-                        console.log(1);
-
-                        console.log(card);
-                        card.imgUrls.map((url: any) => <img src={url} />);
-                    }}
-                </Carousel> */}
-                <div>
-                    {() => {
-                        console.log(1);
-
-                        console.log(card);
-                        card.imgUrls.map((url: any) => <img src={url} />);
-                    }}
-                </div>
+                    src={card.imagesUrl[0]}
+                />
             </Grid>
             <Grid item>
                 <Grid
