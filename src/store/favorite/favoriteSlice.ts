@@ -8,7 +8,7 @@ export interface FavoriteState {
 const initialState: FavoriteState = {
     favoriteItems: [],
 };
-
+//TODO
 export const favoriteSlice = createSlice({
     name: "favorite",
     initialState,

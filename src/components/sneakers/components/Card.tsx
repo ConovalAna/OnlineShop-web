@@ -93,7 +93,7 @@ function Card({ card, onAddToFavorites, isLoading }: any) {
                         className="card__image"
                         src={card.imagesUrl[0]}
                         alt={card.name}
-                         onClick={handleClickOpen}
+                        onClick={handleClickOpen}
                     />
                     <p className="card__title">{card.name}</p>
                     <div className="card__buy">
@@ -126,13 +126,10 @@ function Card({ card, onAddToFavorites, isLoading }: any) {
                         open={open}
                         onClose={handleClose}
                     >
-                        <DialogTitle>{card.name}</DialogTitle>
+                        {/* <DialogTitle>{card.name}</DialogTitle> */}
                         <DialogContent>
                             <CardPopupInfo card={card} />
                         </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose}>Close</Button>
-                        </DialogActions>
                     </Dialog>
                 </>
             )}

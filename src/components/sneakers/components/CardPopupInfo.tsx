@@ -16,11 +16,18 @@ import { useDispatch } from 'react-redux';
 
 export default function CardPopupInfo({ card }: any) {
     const [size, setSize] = React.useState('');
+    const [count, setCount] = React.useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
         setSize(event.target.value as string);
         console.log(card);
     };
+
+    const handleChangeCount = (event: SelectChangeEvent) => {
+        setCount(event.target.value as string);
+        console.log(card);
+    };
+
     const dispatch = useDispatch();
 
     const cartHandler = () => dispatch(addToCart(card));
@@ -28,66 +35,118 @@ export default function CardPopupInfo({ card }: any) {
     return (
         <Grid container spacing={3}>
             <Grid item xs={6}>
-                {/* <Box
-                    component="img"
-                    sx={{
-                        height: 350,
-                        maxHeight: { xs: 350, md: 350 },
-                    }}
-                    alt={card.title}
-                    src={card.imagesUrl[0]}
-                />*/}
                 <Carousel>
                     {card.imagesUrl.map((url: any) => (
                         <img src={url} className="card-button__images" />
                     ))}
                 </Carousel>
-                {/* <div>
-                    {card.imagesUrl.map((url: any) => (
-                        <img src={url} />
-                    ))}
-                </div> */}
             </Grid>
-            <Grid item>
+            <Grid item xs={6}>
                 <Grid
+                    xs={12}
                     container
-                    direction="row"
-                    justifyContent="space-around"
-                    alignItems="center"
+                    spacing={{ xs: 2, md: 3 }}
+                    direction="column"
+                    justifyContent="space-between"
+                    sx={{ height: 1 }}
                 >
-                    <Grid item>
-                        <Box
-                            sx={{
-                                minWidth: 70,
-                                maxWidth: 120,
-                            }}
+                    <Grid item xs={6}>
+                        <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-around"
+                            alignItems="center"
                         >
-                            <FormControl fullWidth>
-                                <InputLabel id="size-select-label">
-                                    Size
-                                </InputLabel>
-                                <Select
-                                    labelId="size-select-label"
-                                    id="size-select"
-                                    value={size}
-                                    label="Size"
-                                    onChange={handleChange}
+                            <Grid item xs={12}>
+                                <p>{card.name}</p>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <hr className="divider" />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Box
+                                    sx={{
+                                        minWidth: 70,
+                                        maxWidth: 120,
+                                    }}
                                 >
-                                    <MenuItem value={10}>10</MenuItem>
-                                    <MenuItem value={20}>20</MenuItem>
-                                    <MenuItem value={30}>30</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
+                                    <p>{card.description}</p>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <hr className="divider" />
+                            </Grid>
+                            {/* {ColorContainer} */}
+                            {/* {SizeContainer}
+                    {BuySection} */}
+                            <Grid item xs={12} direction="row" display="flex">
+                                <Box
+                                    sx={{
+                                        minWidth: 70,
+                                        maxWidth: 120,
+                                    }}
+                                >
+                                    <FormControl fullWidth>
+                                        <InputLabel id="size-select-label">
+                                            Size
+                                        </InputLabel>
+                                        <Select
+                                            labelId="size-select-label"
+                                            id="size-select"
+                                            value={size}
+                                            label="Size"
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={20}>20</MenuItem>
+                                            <MenuItem value={30}>30</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        minWidth: 120,
+                                        maxWidth: 220,
+                                        paddingLeft: 3,
+                                    }}
+                                >
+                                    <FormControl fullWidth>
+                                        <InputLabel id="count-select-label">
+                                            Count
+                                        </InputLabel>
+                                        <Select
+                                            labelId="count-select-label"
+                                            id="count-select"
+                                            value={count}
+                                            label="Count"
+                                            onChange={handleChangeCount}
+                                        >
+                                            <MenuItem value={10}>1</MenuItem>
+                                            <MenuItem value={20}>2</MenuItem>
+                                            <MenuItem value={30}>3</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item>
-                        <Button
-                            onClick={cartHandler}
-                            variant="outlined"
-                            startIcon={<AddShoppingCartIcon />}
+                        <Grid
+                            item
+                            xs={12}
+                            direction="row"
+                            display="flex"
+                            justifyContent="space-between"
                         >
-                            Add to cart
-                        </Button>
+                            <Button variant="text">sum</Button>
+                            <Button
+                                onClick={cartHandler}
+                                variant="outlined"
+                                startIcon={<AddShoppingCartIcon />}
+                            >
+                                Add to cart
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
