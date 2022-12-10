@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react';
-import complete_order from '../images/complete-order.jpg';
-import empty_box from '../images/empty-box.jpg';
-import remove_button from '../images/remove-button-colored.svg';
-import right_arrow from '../images/right-arrow.svg';
-// import { api } from '../utils/Api';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+const complete_order = '/asset/sneakers/complete-order.jpg';
+const empty_box = '/asset/sneakers/empty-box.jpg';
+const remove_button = '/asset/sneakers/remove-button-colored.svg';
+const right_arrow = '/asset/sneakers/right-arrow.svg';
 import Message from './Message';
 import Button from './UI/Button';
+import { RootState } from '../../../store';
+import { api } from '../utils/Api';
 
-function Cart({
-    cartItems,
-    cartCloseHandler,
-    onRemoveItem,
-    isCartOpened,
-}: any) {
+function Cart({ cartCloseHandler, onRemoveItem, isCartOpened }: any) {
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    const amount = useSelector((state: RootState) => state.cart.amount);
+
     const [isOrderCompleted, setIsOrderCompleted] = useState(false);
     const [orderId, setOrderId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -20,19 +20,18 @@ function Cart({
     const delay = (ms: any) =>
         new Promise((resolve) => setTimeout(resolve, ms)); // функция задержки
     //const { itemsPrice, shippingPrice, totalPrice } = useCheckout();
-
+    const delivery = amount * 0.05;
+    const totalPrice = amount + delivery;
     const completeOrder = async () => {
         setIsLoading(true);
-        // api.addOrder(cartItems)
-        //     .then((response) => {
-        //         setOrderId(response.id);
-        //         setCartItems((prev) => [...prev, response]);
-        //         setCartItems([]);
-        //         setIsOrderCompleted(true);
-        //     })
-        //     .catch((error) => console.log(error))
-        //     .finally(() => setIsLoading(false));
 
+        api.addOrder(cartItems)
+            .then((response) => {
+                setOrderId(response.id);
+                setIsOrderCompleted(true);
+            })
+            .catch((error) => console.log(error))
+            .finally(() => setIsLoading(false));
         for (let i = 0; i < cartItems.length; i++) {
             // костыль, так как у mocapi нет удаления всего массива
             // поэтому удаляем по одному товару
@@ -74,9 +73,7 @@ function Cart({
                                 <li key={index} className="cart-item">
                                     <img
                                         className="cart-item__image"
-                                        src={
-                                            process.env.PUBLIC_URL + item.imgUrl
-                                        }
+                                        src={item.imgUrl}
                                         alt={item.title}
                                     />
                                     <div className="cart-item__text">
@@ -84,7 +81,7 @@ function Cart({
                                             {item.title}
                                         </p>
                                         <p className="cart-item__price">
-                                            {item.price} руб.
+                                            {item.price} ron.
                                         </p>
                                     </div>
                                     <img
@@ -98,35 +95,35 @@ function Cart({
                         </ul>
                         <ul className="order-info">
                             <li className="order-info__content">
-                                <p className="order-info__title">Товары:</p>
+                                <p className="order-info__title">Products:</p>
                                 <div className="order-info__dots"></div>
                                 <p className="order-info__value">
-                                    {/* {itemsPrice} руб. */}
+                                    {amount} ron.
                                 </p>
                             </li>
                             <li className="order-info__content">
                                 <p className="order-info__title">
-                                    Доставка 5%:
+                                    Delivery 5%:
                                 </p>
                                 <div className="order-info__dots"></div>
                                 <p className="order-info__value">
-                                    {/* {shippingPrice} руб. */}
+                                    {delivery} ron.
                                 </p>
                             </li>
                             <li className="order-info__content">
-                                <b className="order-info__title">Итого:</b>
+                                <b className="order-info__title">Total:</b>
                                 <div className="order-info__dots"></div>
                                 <p className="order-info__value">
-                                    {/* {totalPrice} руб. */}
+                                    {totalPrice} ron.
                                 </p>
                             </li>
                         </ul>
                         <Button isLoading={isLoading} onClick={completeOrder}>
-                            Оформить заказ
+                            Make order
                             <img
                                 className="button__right-arrow"
                                 src={right_arrow}
-                                alt="Стрелка"
+                                alt="Arrow"
                             />
                         </Button>
                     </>
@@ -135,19 +132,15 @@ function Cart({
                         img={isOrderCompleted ? complete_order : empty_box}
                         title={
                             isOrderCompleted
-                                ? 'Заказ оформлен!'
-                                : 'Корзина пустая'
+                                ? 'Order complete!'
+                                : 'Cart is empty'
                         }
                         subtitle={
                             isOrderCompleted
-                                ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
-                                : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+                                ? `Your #${orderId} soon will be packed`
+                                : 'Please add at least one product, to make order.'
                         }
-                        alt={
-                            isOrderCompleted
-                                ? 'Документ с галочкой'
-                                : 'Пустая корзина'
-                        }
+                        alt={isOrderCompleted ? 'Document' : 'Empty card'}
                         onButtonClick={closeCart}
                     />
                 )}

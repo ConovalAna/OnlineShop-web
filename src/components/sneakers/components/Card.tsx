@@ -1,18 +1,27 @@
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from '@mui/material';
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { addToFavorite } from '../../../store/favorite/favoriteSlice';
+import CardPopupInfo from './CardPopupInfo';
+
 const plusDefault = '/asset/sneakers/button-plus.svg';
 const plusAdded = '/asset/sneakers/button-added.svg';
 const heartLiked = '/asset/sneakers/heart-liked.svg';
 const heartDefault = '/asset/sneakers/heart-default.svg';
 import { addToCart } from '../../../store/cart/cartSlice';
-import { addToFavorite } from '../../../store/favorite/favoriteSlice';
 
 function Card({
     card,
     onAddToFavorites,
-    isOnFavoritesPage = false,
     isLoading,
 }: any) {
     const dispatch = useDispatch();
@@ -21,11 +30,17 @@ function Card({
         (state: RootState) => state.favorite.favoriteItems
     );
 
-    const cartHandler = () => dispatch(addToCart(card));
-    const favoriteHandler = () => {
-        dispatch(addToFavorite(card));
+    const favoriteHandler = () => dispatch(addToFavorite(card));
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
     };
-    //const { openImagePopup, favoriteItems, cartItems } = useContext(AppContext);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <li className="card">
@@ -93,7 +108,7 @@ function Card({
                         </div>
                         <button className="card-button">
                             <img
-                                onClick={cartHandler}
+                                onClick={handleClickOpen}
                                 className="card-button__image"
                                 src={
                                     cartItems.some(
@@ -107,6 +122,21 @@ function Card({
                             />
                         </button>
                     </div>
+
+                    <Dialog
+                        fullWidth={true}
+                        maxWidth={'md'}
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        <DialogTitle>{card.title}</DialogTitle>
+                        <DialogContent>
+                                <CardPopupInfo card={card} />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Close</Button>
+                        </DialogActions>
+                    </Dialog>
                 </>
             )}
         </li>

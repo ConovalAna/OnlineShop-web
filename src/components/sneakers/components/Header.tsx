@@ -1,15 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-function Header({ onOpenCart, email }: any) {
-    //const { itemsPrice } = useCheckout();
-
+import { RootState } from '../../../store';
+import Cart from './Cart';
+function Header() {
+    const email = 'simpleuser@email.com';
+    const amount = useSelector((state: RootState) => state.cart.amount);
+    const [isCartOpened, setIsCartOpened] = useState(false);
+    const cartCloseHandler = () => {
+        setIsCartOpened(false);
+    };
+    const onOpenCart = () => {
+        setIsCartOpened(true);
+    };
     const logout = () => {
-        //setIsAuth(false);
         localStorage.removeItem('token');
     };
 
     return (
         <header className="header">
+            <Cart
+                cartCloseHandler={cartCloseHandler}
+                isCartOpened={isCartOpened}
+            />
             <div className="header__content">
                 <NavLink to="/">
                     <div className="header__logo">
@@ -33,9 +46,7 @@ function Header({ onOpenCart, email }: any) {
                             src="/asset/sneakers/cart.svg"
                             alt="Cart"
                         />
-                        <span className="header__price">
-                            {/* {itemsPrice}  */}0 RON.
-                        </span>
+                        <span className="header__price">{amount} ron.</span>
                     </li>
                     <NavLink
                         to="/orders"
