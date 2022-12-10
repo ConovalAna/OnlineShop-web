@@ -37,10 +37,7 @@ function Favorites({ onAddToCart, onAddToFavorites, onOpenCart, email }: any) {
                         ))
                     ) : (
                         <Message
-                            img={
-                                process.env.PUBLIC_URL +
-                                `/images/emoji/emoji-${numberForEmoji}.png`
-                            }
+                            img={`/images/emoji/emoji-${numberForEmoji}.png`}
                             title="Закладок нет :("
                             subtitle="Вы ничего не добавляли в закладки"
                             alt="Смайлик"

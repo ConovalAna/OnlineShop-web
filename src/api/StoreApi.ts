@@ -31,6 +31,10 @@ export function fetchProductAsync(productId: number): Promise<IProduct> {
     return StoreApi.Instance.fetchProduct(productId);
 }
 
+export function addToFavoriteAsync(productId: number, userId: number): Promise<IProduct> {
+    return StoreApi.Instance.AddToFavorite(productId, userId);
+}
+
 
 class StoreApi extends APIClient {
     private static _instance: StoreApi;
@@ -75,6 +79,11 @@ class StoreApi extends APIClient {
 
     async DeleteProduct(productId: number): Promise<any> {
         const response = await this.doDELETE(`products/${productId}`, {});
+        return response;
+    }
+
+    async AddToFavorite(productId: number, userId: number): Promise<any> {
+        const response = await this.doPOST(`products/favorite/${productId}?userId=${userId}`, {});
         return response;
     }
 

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { addToFavoriteAsync } from '../../api/StoreApi';
 
 export interface FavoriteState {
     favoriteItems: any[];
@@ -16,7 +17,8 @@ export const favoriteSlice = createSlice({
         addToFavorite: (state, action: PayloadAction<any>) => {
             if (!state.favoriteItems.some((item: any) =>
                 item.customId === action.payload.customId)) {
-                state.favoriteItems.push(action.payload)
+                state.favoriteItems.push(action.payload);
+                addToFavoriteAsync(11, 1);
             }
             else {
                 state.favoriteItems = state.favoriteItems.filter((item: any) =>

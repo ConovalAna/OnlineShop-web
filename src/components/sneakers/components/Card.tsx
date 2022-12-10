@@ -8,7 +8,6 @@ const heartLiked = '/asset/sneakers/heart-liked.svg';
 const heartDefault = '/asset/sneakers/heart-default.svg';
 import { addToCart } from '../../../store/cart/cartSlice';
 import { addToFavorite } from '../../../store/favorite/favoriteSlice';
-import { IsInFavoriteList } from '../../../utils/helper';
 
 function Card({
     card,
@@ -23,7 +22,9 @@ function Card({
     );
 
     const cartHandler = () => dispatch(addToCart(card));
-    const favoriteHandler = () => dispatch(addToFavorite(card));
+    const favoriteHandler = () => {
+        dispatch(addToFavorite(card));
+    };
     //const { openImagePopup, favoriteItems, cartItems } = useContext(AppContext);
 
     return (
