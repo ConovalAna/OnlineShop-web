@@ -83,6 +83,12 @@ function Cart({ cartCloseHandler, onRemoveItem, isCartOpened }: any) {
                                         <p className="cart-item__price">
                                             {item.price} ron.
                                         </p>
+                                        <p className="cart-item__price">
+                                            {item.size} size
+                                        </p>
+                                        <p className="cart-item__price">
+                                            {item.countity} countity
+                                        </p>
                                     </div>
                                     <img
                                         onClick={() => onRemoveItem(item)}

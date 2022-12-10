@@ -40,7 +40,11 @@ export function deleteFromFavoriteAsync(productId: number, userId: number): Prom
 }
 
 export function getFavoriteAsync(userId: number): Promise<IProduct> {
-    return StoreApi.Instance.DeleteFromFavorite(userId);
+    return StoreApi.Instance.GetFavorite(userId);
+}
+
+export function getProductImagesAsync(productId: number): Promise<IProduct> {
+    return StoreApi.Instance.GetProductImages(productId);
 }
 
 class StoreApi extends APIClient {
@@ -100,6 +104,11 @@ class StoreApi extends APIClient {
     }
 
     async GetFavorite(userId: number): Promise<any> {
+        const response = await this.doGET(`products/favorite/${userId}`, {});
+        return response;
+    }
+
+    async GetProductImages(userId: number): Promise<any> {
         const response = await this.doGET(`products/favorite/${userId}`, {});
         return response;
     }

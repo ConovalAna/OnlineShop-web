@@ -9,15 +9,17 @@ import {
     Select,
     SelectChangeEvent,
 } from '@mui/material';
+import Carousel from 'react-material-ui-carousel';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { addToCart } from '../../../store/cart/cartSlice';
 import { useDispatch } from 'react-redux';
 
-export default function CardPopupInfo({ card }: any) {
+export default function CardPopupInfo({ card, images }: any) {
     const [size, setSize] = React.useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
         setSize(event.target.value as string);
+        console.log(card);
     };
     const dispatch = useDispatch();
 
@@ -26,7 +28,7 @@ export default function CardPopupInfo({ card }: any) {
     return (
         <Grid container spacing={3}>
             <Grid item xs={6}>
-                <Box
+                {/* <Box
                     component="img"
                     sx={{
                         height: 350,
@@ -34,7 +36,23 @@ export default function CardPopupInfo({ card }: any) {
                     }}
                     alt={card.title}
                     src={card.imgUrl}
-                />
+                /> */}
+                {/* <Carousel>
+                    {() => {
+                        console.log(1);
+
+                        console.log(card);
+                        card.imgUrls.map((url: any) => <img src={url} />);
+                    }}
+                </Carousel> */}
+                <div>
+                    {() => {
+                        console.log(1);
+
+                        console.log(card);
+                        card.imgUrls.map((url: any) => <img src={url} />);
+                    }}
+                </div>
             </Grid>
             <Grid item>
                 <Grid
