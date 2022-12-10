@@ -33,7 +33,7 @@ export default function CardPopupInfo({ card }: any) {
                         maxHeight: { xs: 350, md: 350 },
                     }}
                     alt={card.title}
-                    src={card.imgUrl}
+                    src={card.imagesUrl[0]}
                 />
             </Grid>
             <Grid item>

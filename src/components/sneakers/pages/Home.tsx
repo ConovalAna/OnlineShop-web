@@ -11,12 +11,10 @@ function Home({
     setSearchQuery,
     searchedCards,
     onAddToFavorites,
-    onOpenCart,
     isLoading,
     cardsCount,
     selectedSort,
     sortItems,
-    email,
 }: any) {
     const [numberForEmoji, setNumberForEmoji] = useState(1);
 
@@ -26,7 +24,7 @@ function Home({
 
     return (
         <div className="page__wrapper">
-            <Header onOpenCart={onOpenCart} email={email} />
+            <Header />
             <section className="store">
                 <div className="store__header">
                     <h2 className="store__title">

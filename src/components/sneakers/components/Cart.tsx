@@ -73,12 +73,12 @@ function Cart({ cartCloseHandler, onRemoveItem, isCartOpened }: any) {
                                 <li key={index} className="cart-item">
                                     <img
                                         className="cart-item__image"
-                                        src={item.imgUrl}
-                                        alt={item.title}
+                                        src={item.imagesUrl && item.imagesUrl[0]}
+                                        alt={item.name}
                                     />
                                     <div className="cart-item__text">
                                         <p className="cart-item__title">
-                                            {item.title}
+                                            {item.name}
                                         </p>
                                         <p className="cart-item__price">
                                             {item.price} ron.
