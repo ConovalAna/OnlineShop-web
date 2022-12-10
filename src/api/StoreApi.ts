@@ -35,6 +35,13 @@ export function addToFavoriteAsync(productId: number, userId: number): Promise<I
     return StoreApi.Instance.AddToFavorite(productId, userId);
 }
 
+export function deleteFromFavoriteAsync(productId: number, userId: number): Promise<IProduct> {
+    return StoreApi.Instance.DeleteFromFavorite(productId, userId);
+}
+
+export function getFavoriteAsync(userId: number): Promise<IProduct> {
+    return StoreApi.Instance.DeleteFromFavorite(userId);
+}
 
 class StoreApi extends APIClient {
     private static _instance: StoreApi;
@@ -84,6 +91,16 @@ class StoreApi extends APIClient {
 
     async AddToFavorite(productId: number, userId: number): Promise<any> {
         const response = await this.doPOST(`products/favorite/${productId}?userId=${userId}`, {});
+        return response;
+    }
+
+    async DeleteFromFavorite(productId: number, userId: number): Promise<any> {
+        const response = await this.doDELETE(`products/favorite/${productId}?userId=${userId}`, {});
+        return response;
+    }
+
+    async GetFavorite(userId: number): Promise<any> {
+        const response = await this.doGET(`products/favorite/${userId}`, {});
         return response;
     }
 

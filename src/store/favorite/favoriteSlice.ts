@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addToFavoriteAsync } from '../../api/StoreApi';
+import { addToFavoriteAsync, deleteFromFavoriteAsync } from '../../api/StoreApi';
 
 export interface FavoriteState {
     favoriteItems: any[];
@@ -24,12 +24,14 @@ export const favoriteSlice = createSlice({
                 state.favoriteItems = state.favoriteItems.filter((item: any) =>
                     item.customId !== action.payload.customId
                 );
+                deleteFromFavoriteAsync(11, 1);
             }
         },
         removeFromFavorite: (state, action: PayloadAction<any>) => {
             const index = state.favoriteItems.indexOf((item: any) =>
                 item.customId === action.payload.customId
             );
+            deleteFromFavoriteAsync(11, 1);
             state.favoriteItems = state.favoriteItems.splice(index, 1);
         }
 
