@@ -39,7 +39,7 @@ function Favorites() {
                             alt="Smile"
                         />
                     )}
-                </ul> */}
+                </ul>
             </section>
         </div>
     );

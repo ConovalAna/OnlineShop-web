@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { IProduct } from '../../../api/store-api';
-import { useProductsQuery } from '../../../api/use-store-api';
+import { useFavoriteQuery, useProductsQuery } from '../../../api/use-store-api';
 import {
     addToFavorite,
     updateFavorite,
@@ -22,16 +22,13 @@ export function useFavorite() {
     );
     const productsQuery = useProductsQuery();
     const [favoriteProducts, setFavoriteProducts] = useState<IProduct[]>([]);
+    const favoriteQuery = useFavoriteQuery(auth?.user);
 
     useEffect(() => {
-        if (auth?.user) {
-            getFavoriteAsync().then((favoriteList) => {
-                if (favoriteList?.length) {
-                    dispatch(updateFavorite(favoriteList));
-                }
-            });
+        if (favoriteQuery?.data) {
+                    dispatch(updateFavorite(favoriteQuery.data));
         }
-    }, [auth?.user]);
+    }, [favoriteQuery?.data]);
 
     useEffect(() => {
         if (favoriteItems && productsQuery.data) {

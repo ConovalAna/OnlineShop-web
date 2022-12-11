@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { ICartItem, IProduct } from '../../../api/store-api';
 import useCart from '../hooks/useCart';
 
-export default function CardPopupInfo({ card }: { card: IProduct }) {
+export default function CardPopupInfo({closePopup, card }: { card: IProduct, closePopup: Function }) {
     const [size, setSize] = React.useState('');
     const cart = useCart();
 
@@ -62,11 +62,15 @@ export default function CardPopupInfo({ card }: { card: IProduct }) {
     };
 
     const cartHandler = () =>
-        cart.addToCartHandler({
+    {
+       cart.addToCartHandler({
             productId: card.productId,
             quantity: parseInt(count),
             size: parseInt(size),
-        });
+        }); 
+        closePopup();
+    }
+        
 
     return (
         <Grid container spacing={3}>

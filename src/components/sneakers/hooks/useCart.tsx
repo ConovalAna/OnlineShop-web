@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { IProduct, ICartItem } from '../../../api/store-api';
-import { useProductsQuery, useCartItemsQuery } from '../../../api/use-store-api';
+import { useProductsQuery } from '../../../api/use-store-api';
 import {
     addToCart,
     removeFromCart,
     updateCart,
+    clearCart,
 } from '../../../store/cart/cartSlice';
 import { useAuth } from '../../../common/auth.hook';
 import {
@@ -48,7 +49,7 @@ export function useCart() {
     useEffect(() => {
         if (auth?.user) {
             fetchCartAsync().then((cartItems) => {
-                if (cartItems?.length) {
+                if (cartItems) {
                     dispatch(updateCart(cartItems));
                 }
             });
@@ -80,26 +81,47 @@ export function useCart() {
         }
     }, [cartItems, productsQuery.data]);
 
-    const addToCartHandler = useCallback((cartItem: ICartItem) => {
-        dispatch(addToCart(cartItem));
+    const addToCartHandler = useCallback(
+        (cartItem: ICartItem) => {
+            dispatch(addToCart(cartItem));
+            if (auth?.user) {
+                addToCartAsync(cartItem);
+            }
+        },
+        [auth?.user]
+    );
+
+    const removeFromCartHandler = useCallback(
+        (cartItem: ICartItem) => {
+            dispatch(removeFromCart(cartItem));
+            if (auth?.user) {
+                removeFromCartAsync(cartItem).then(() => {});
+            }
+        },
+        [auth?.user]
+    );
+
+    const updateCartHandler = useCallback(() => {
         if (auth?.user) {
-            addToCartAsync(cartItem);
+            fetchCartAsync().then((cartItems) => {
+                if (cartItems) {
+                    dispatch(updateCart(cartItems));
+                }
+            });
         }
     }, [auth?.user]);
 
-    const removeFromCartHandler = useCallback((cartItem: ICartItem) => {
-        dispatch(removeFromCart(cartItem));
-        if (auth?.user) {
-            removeFromCartAsync(cartItem).then(()=>{});
-        }
-    }, [auth?.user]);
-
+    const clearCartHandler = useCallback(() => {
+        dispatch(clearCart());
+    }, []);
     return {
         cartItems,
         amount,
         cartProducts,
         addToCartHandler,
         removeFromCartHandler,
+        updateCartHandler,
+        clearCartHandler
     };
 }
 
