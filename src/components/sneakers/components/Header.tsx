@@ -40,7 +40,7 @@ function Header() {
                 isCartOpened={isCartOpened}
             />
             <div className="header__content">
-                <NavLink to="/">
+                <NavLink to="/sneakers">
                     <div className="header__logo">
                         <img
                             className="logo"
@@ -73,7 +73,7 @@ function Header() {
                             />
                         </li>
                     </NavLink>}
-                    <NavLink to="/sneakers/favorite">
+                    <NavLink to="/favorite">
                         <li>
                             <img
                                 className="header__icon"

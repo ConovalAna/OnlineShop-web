@@ -12,6 +12,7 @@ import {
     EmailAndPasswordActionHook,
 } from 'react-firebase-hooks/auth';
 import { clearCart } from '../store/cart/cartSlice';
+import {  clearFavorite } from "../store/favorite/favoriteSlice";
 import { useDispatch } from 'react-redux';
 export type AuthType = {
     user: User | undefined | null;
@@ -68,6 +69,7 @@ function useProvideAuth(): AuthType {
         logout: () => {
             logout();
             dispatch(clearCart());
+            dispatch(clearFavorite());
         },
     };
 }

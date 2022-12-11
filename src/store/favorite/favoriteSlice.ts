@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addToFavoriteAsync, deleteFromFavoriteAsync } from '../../api/StoreApi';
 
 export interface FavoriteState {
-    favoriteItems: any[];
+    favoriteItems: number[];
 }
 
 const initialState: FavoriteState = {
@@ -13,31 +12,27 @@ export const favoriteSlice = createSlice({
     name: "favorite",
     initialState,
     reducers: {
-
-        addToFavorite: (state, action: PayloadAction<any>) => {
-            if (!state.favoriteItems.some((item: any) =>
-                item.customId === action.payload.customId)) {
+        updateFavorite: (state,  action: PayloadAction<number[]>) => {
+            state.favoriteItems = action.payload;
+        },
+        addToFavorite: (state, action: PayloadAction<number>) => {
+            if (!state.favoriteItems.some((item) =>
+                item === action.payload)) {
                 state.favoriteItems.push(action.payload);
-                addToFavoriteAsync(11, 1);
             }
             else {
-                state.favoriteItems = state.favoriteItems.filter((item: any) =>
-                    item.customId !== action.payload.customId
+                state.favoriteItems = state.favoriteItems.filter((item) =>
+                    item !== action.payload
                 );
-                deleteFromFavoriteAsync(11, 1);
             }
         },
-        removeFromFavorite: (state, action: PayloadAction<any>) => {
-            const index = state.favoriteItems.indexOf((item: any) =>
-                item.customId === action.payload.customId
-            );
-            deleteFromFavoriteAsync(11, 1);
-            state.favoriteItems = state.favoriteItems.splice(index, 1);
-        }
+        clearFavorite: (state) => {
+            state.favoriteItems = [];
+        },
 
     },
 });
 
-export const { addToFavorite, removeFromFavorite } = favoriteSlice.actions;
+export const { addToFavorite, updateFavorite, clearFavorite } = favoriteSlice.actions;
 
 export default favoriteSlice.reducer;
