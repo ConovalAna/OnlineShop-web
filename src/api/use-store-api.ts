@@ -1,8 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteProductsAsync, fetchProductAsync, fetchProductCategories, fetchProductsAsync } from "./StoreApi";
+import { deleteProductsAsync, fetchCartAsync, fetchProductAsync, fetchProductCategories, fetchProductsAsync } from "./StoreApi";
 
 export const useProductsQuery = () =>
     useQuery(['products'], fetchProductsAsync, { staleTime: 20000 })
+
+export const useCartItemsQuery = () =>
+    useQuery(['cartItems'], fetchCartAsync, { staleTime: Infinity })
 
 
 export const useProductCategoriesQuery = () =>

@@ -1,15 +1,13 @@
 import { useAuth } from '../../../common/auth.hook';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { RootState } from '../../../store';
 import Cart from './Cart';
 import { Dialog, DialogContent } from '@mui/material';
 import LoginPopup from './LoginPopup';
+import useCart from '../hooks/useCart';
 function Header() {
     const auth = useAuth();
-
-    const amount = useSelector((state: RootState) => state.cart.amount);
+    const cart = useCart();
     const [isCartOpened, setIsCartOpened] = useState(false);
     const cartCloseHandler = () => {
         setIsCartOpened(false);
@@ -64,11 +62,13 @@ function Header() {
                             src="/asset/sneakers/cart.svg"
                             alt="Cart"
                         />
-                        <span className="header__price">{amount} ron.</span>
+                        <span className="header__price">
+                            {cart.amount} ron.
+                        </span>
                     </li>
                     {auth?.user && (
                         <NavLink
-                            to="/sneakers/orders"
+                            to="/orders"
                             className={({ isActive }) => {
                                 return isActive ? 'header__link_active' : '';
                             }}
@@ -83,7 +83,7 @@ function Header() {
                         </NavLink>
                     )}
                     <NavLink
-                        to="/sneakers/favorite"
+                        to="/favorite"
                         className={({ isActive }) => {
                             return isActive ? 'header__link_active' : '';
                         }}

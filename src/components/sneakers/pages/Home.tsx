@@ -20,7 +20,7 @@ function Home({
 
     useEffect(() => setNumberForEmoji(getRandomNumber(1, 10)), [searchQuery]);
 
-    const arrayWithEmptyObjs = createArrWithEmptyObjs(cardsCount); // создаем массив из пустых объектов для загрузки
+    const arrayWithEmptyObjs = createArrWithEmptyObjs(cardsCount); 
 
     return (
         <div className="page__wrapper">
@@ -57,8 +57,7 @@ function Home({
                 ) : (
                     <CardList
                         cards={
-                            // isLoading ? arrayWithEmptyObjs : searchedCards
-                            searchedCards
+                           isLoading ? arrayWithEmptyObjs : searchedCards
                         }
                         onAddToFavorites={onAddToFavorites}
                         isLoading={isLoading}

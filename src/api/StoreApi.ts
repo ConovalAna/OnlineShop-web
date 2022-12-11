@@ -1,5 +1,6 @@
+import { auth } from "../firebase";
 import APIClient from "./api";
-import { ICategory, IDeliveryMethod, IProduct } from "./store-api";
+import { ICartItem, ICategory, IDeliveryMethod, IProduct, IUserAccount } from "./store-api";
 
 
 export function fetchProductCategories(): Promise<ICategory[]> {
@@ -30,16 +31,36 @@ export function fetchProductAsync(productId: number): Promise<IProduct> {
     return StoreApi.Instance.fetchProduct(productId);
 }
 
-export function addToFavoriteAsync(productId: number, userId: number): Promise<IProduct> {
-    return StoreApi.Instance.AddToFavorite(productId, userId);
+export function addToFavoriteAsync(productId: number): Promise<IProduct> {
+    return StoreApi.Instance.AddToFavorite(productId);
 }
 
-export function deleteFromFavoriteAsync(productId: number, userId: number): Promise<IProduct> {
-    return StoreApi.Instance.DeleteFromFavorite(productId, userId);
+export function removeFromFavoriteAsync(productId: number): Promise<IProduct> {
+    return StoreApi.Instance.DeleteFromFavorite(productId);
 }
 
-export function getFavoriteAsync(userId: number): Promise<IProduct> {
-    return StoreApi.Instance.GetFavorite(userId);
+export function deleteFromFavoriteAsync(productId: number): Promise<IProduct> {
+    return StoreApi.Instance.DeleteFromFavorite(productId);
+}
+
+export function getFavoriteAsync(): Promise<number[]> {
+    return StoreApi.Instance.GetFavorite();
+}
+
+export function fetchCartAsync(): Promise<ICartItem[]> {
+    return StoreApi.Instance.GetCart();
+}
+
+export function addToCartAsync(cartItem: ICartItem): Promise<any> {
+    return StoreApi.Instance.AddToCart(cartItem);
+}
+
+export function removeFromCartAsync(cartItem: ICartItem): Promise<any> {
+    return StoreApi.Instance.RemoveFromCart(cartItem);
+}
+
+export function UpdateUserAccountAsync(userAccount: IUserAccount): Promise<string> {
+    return StoreApi.Instance.UpdateUserAccount(userAccount);
 }
 
 class StoreApi extends APIClient {
@@ -88,18 +109,47 @@ class StoreApi extends APIClient {
         return response;
     }
 
-    async AddToFavorite(productId: number, userId: number): Promise<any> {
-        const response = await this.doPOST(`products/favorite/${productId}?userId=${userId}`, {});
+    async AddToFavorite(productId: number): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doPOST(`products/favorite/${productId}`,{},{ headers: { Authorization: `Bearer ${token}` } });
         return response;
     }
 
-    async DeleteFromFavorite(productId: number, userId: number): Promise<any> {
-        const response = await this.doDELETE(`products/favorite/${productId}?userId=${userId}`, {});
+    async DeleteFromFavorite(productId: number): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+
+        const response = await this.doDELETE(`products/favorite/${productId}`, { headers: { Authorization: `Bearer ${token}` } });
         return response;
     }
 
-    async GetFavorite(userId: number): Promise<any> {
-        const response = await this.doGET(`products/favorite/${userId}`, {});
+    async GetFavorite(): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+
+        const response = await this.doGET(`products/favorite`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async GetCart(): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doGET(`Cart`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async AddToCart(cart: ICartItem): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doPOST(`Cart`, cart, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async RemoveFromCart(cart: ICartItem): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doDELETE(`Cart/${cart.productId}/${cart.size}`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async UpdateUserAccount(userAccount: IUserAccount): Promise<string> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doPOST(`User`, userAccount, { headers: { Authorization: `Bearer ${token}` } });
         return response;
     }
 }

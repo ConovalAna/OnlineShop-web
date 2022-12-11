@@ -1,32 +1,19 @@
-import {
-    Box,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from '@mui/material';
+import { Dialog, DialogContent } from '@mui/material';
 import React from 'react';
 import ContentLoader from 'react-content-loader';
-import { useDispatch, useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { addToFavorite } from '../../../store/favorite/favoriteSlice';
+import useFavorite from '../hooks/useFavorites';
 import CardPopupInfo from './CardPopupInfo';
 
 const plusDefault = '/asset/sneakers/button-plus.svg';
 const plusAdded = '/asset/sneakers/button-added.svg';
 const heartLiked = '/asset/sneakers/heart-liked.svg';
 const heartDefault = '/asset/sneakers/heart-default.svg';
-import { addToCart } from '../../../store/cart/cartSlice';
 
-function Card({ card, onAddToFavorites, isLoading }: any) {
-    const dispatch = useDispatch();
+function Card({ card, isLoading }: any) {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-    const favoriteItems = useSelector(
-        (state: RootState) => state.favorite.favoriteItems
-    );
-
-    const favoriteHandler = () => dispatch(addToFavorite(card));
+    const favorite = useFavorite();
 
     const [open, setOpen] = React.useState(false);
 
@@ -71,15 +58,18 @@ function Card({ card, onAddToFavorites, isLoading }: any) {
                 </ContentLoader>
             ) : (
                 <>
-                    {onAddToFavorites && (
+                    {
                         <button className="card-button card-button_type_favorite">
                             <img
-                                onClick={favoriteHandler}
+                                onClick={() =>
+                                    favorite.addToFavoriteHandler(
+                                        card.productId
+                                    )
+                                }
                                 className="card-button__image"
                                 src={
-                                    favoriteItems.some(
-                                        (item) =>
-                                            item.customId === card.customId
+                                    favorite.favoriteItems.some(
+                                        (item) => item === card.productId
                                     )
                                         ? heartLiked
                                         : heartDefault
@@ -87,13 +77,13 @@ function Card({ card, onAddToFavorites, isLoading }: any) {
                                 alt="Empty heart"
                             />
                         </button>
-                    )}
+                    }
                     <img
                         // onClick={() =>{ openImagePopup(card)}}
                         className="card__image"
                         src={card.imagesUrl[0]}
                         alt={card.name}
-                        onClick={handleClickOpen}
+                        onClick={() => handleClickOpen()}
                     />
                     <p className="card__title">{card.name}</p>
                     <div className="card__buy">
@@ -105,12 +95,12 @@ function Card({ card, onAddToFavorites, isLoading }: any) {
                         </div>
                         <button className="card-button">
                             <img
-                                onClick={handleClickOpen}
+                                onClick={() => handleClickOpen()}
                                 className="card-button__image"
                                 src={
                                     cartItems.some(
                                         (item) =>
-                                            item.customId === card.customId
+                                            item.productId === card.productId
                                     )
                                         ? plusAdded
                                         : plusDefault
