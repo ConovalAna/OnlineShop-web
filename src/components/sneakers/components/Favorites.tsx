@@ -24,7 +24,7 @@ function Favorites({ onAddToCart, onAddToFavorites, onOpenCart, email }: any) {
                 <div className="store__header">
                     <h2 className="store__title">Мои закладки</h2>
                 </div>
-                <ul className="cards-grid">
+                {/* <ul className="cards-grid">
                     {favoriteItems.length ? (
                         favoriteItems.map((card) => (
                             <Card
@@ -43,7 +43,7 @@ function Favorites({ onAddToCart, onAddToFavorites, onOpenCart, email }: any) {
                             alt="Смайлик"
                         />
                     )}
-                </ul>
+                </ul> */}
             </section>
         </div>
     );

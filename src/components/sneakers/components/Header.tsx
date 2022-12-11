@@ -42,7 +42,7 @@ function Header() {
                 isCartOpened={isCartOpened}
             />
             <div className="header__content">
-                <NavLink to="/">
+                <NavLink to="/sneakers">
                     <div className="header__logo">
                         <img
                             className="logo"
@@ -66,16 +66,28 @@ function Header() {
                         />
                         <span className="header__price">{amount} ron.</span>
                     </li>
-                    {auth?.user && <NavLink to="/orders">
-                        <li>
-                            <img
-                                className="header__icon"
-                                src="/asset/sneakers/profile.svg"
-                                alt="Profile"
-                            />
-                        </li>
-                    </NavLink>}
-                    <NavLink to="/sneakers/favorite">
+                    {auth?.user && (
+                        <NavLink
+                            to="/sneakers/orders"
+                            className={({ isActive }) => {
+                                return isActive ? 'header__link_active' : '';
+                            }}
+                        >
+                            <li>
+                                <img
+                                    className="header__icon"
+                                    src="/asset/sneakers/profile.svg"
+                                    alt="Profile"
+                                />
+                            </li>
+                        </NavLink>
+                    )}
+                    <NavLink
+                        to="/sneakers/favorite"
+                        className={({ isActive }) => {
+                            return isActive ? 'header__link_active' : '';
+                        }}
+                    >
                         <li>
                             <img
                                 className="header__icon"
@@ -86,7 +98,7 @@ function Header() {
                     </NavLink>
                     <li>
                         <img
-                            onClick={auth?.user ? logout: handleClickOpenLogin}
+                            onClick={auth?.user ? logout : handleClickOpenLogin}
                             className="header__icon"
                             src="/asset/sneakers/exit.svg"
                             alt="Exit"
