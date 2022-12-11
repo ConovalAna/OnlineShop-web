@@ -62,7 +62,7 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
                 }`}
             >
                 <div className="cart__header">
-                    <h2 className="cart__title">Корзина</h2>
+                    <h2 className="cart__title">Shopping cart</h2>
                     <img
                         onClick={closeCart}
                         className="close-button"

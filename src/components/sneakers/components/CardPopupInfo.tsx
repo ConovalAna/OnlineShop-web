@@ -11,37 +11,32 @@ import {
 } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { IProduct } from '../../../api/store-api';
-import { RootState } from '../../../store';
+import { useEffect, useState } from 'react';
+import { ICartItem, IProduct } from '../../../api/store-api';
 import useCart from '../hooks/useCart';
 
 export default function CardPopupInfo({ card }: { card: IProduct }) {
     const [size, setSize] = React.useState('');
     const cart = useCart();
+
+    const [cartItem, setCartItem] = useState<ICartItem | any>(undefined);
     const [sizeStock, setSizeStock] = React.useState({
         stockSize: 0,
         stockCount: 0,
     });
-    const [count, setCount] = React.useState('');
-    const [sizes, setSizes] = React.useState<any>([]);
-
-    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    const [count, setCount] = useState('');
+    const [sizes, setSizes] = useState<any>([]);
     useEffect(() => {
-        if (cartItems) {
-            let cartItem = cartItems.find(
-                (cartItem) => card.productId === cartItem.productId
-            );
-            setSize(`${cartItem?.size}`);
-            let correctSize = sizes.find(
-                (size: any) => size.stockSize == `${cartItem?.size}`
-            );
-            if (correctSize) setSizeStock(correctSize);
-            setCount(`${cartItem?.quantity}`);
-        } else {
+        if (count && size)
+            setCartItem({
+                productId: card.productId,
+                quantity: parseInt(count),
+                size: parseInt(size),
+            });
+        else {
+            setCartItem(undefined);
         }
-    }, [cartItems]);
+    }, [count, size]);
 
     useEffect(() => {
         const sizes2 = card.stocks?.map((stock: any) => {
@@ -60,12 +55,10 @@ export default function CardPopupInfo({ card }: { card: IProduct }) {
         );
         if (correctSize) setSizeStock(correctSize);
         setCount('');
-        console.log(correctSize);
     };
 
     const handleChangeCount = (event: SelectChangeEvent) => {
         setCount(event.target.value as string);
-        console.log(card);
     };
 
     const cartHandler = () =>
@@ -183,10 +176,13 @@ export default function CardPopupInfo({ card }: { card: IProduct }) {
                             display="flex"
                             justifyContent="space-between"
                         >
-                            <Button variant="text">sum</Button>
+                            <Button variant="text">
+                                {cartItem ? cartItem.quantity * card.price : "---"}
+                            </Button>
                             <Button
                                 onClick={cartHandler}
                                 variant="outlined"
+                                disabled={!cartItem}
                                 startIcon={<AddShoppingCartIcon />}
                             >
                                 Add to cart
