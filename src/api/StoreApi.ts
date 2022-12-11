@@ -1,6 +1,6 @@
 import { auth } from "../firebase";
 import APIClient from "./api";
-import { ICartItem, ICategory, IDeliveryMethod, IProduct } from "./store-api";
+import { ICartItem, ICategory, IDeliveryMethod, IProduct, IUserAccount } from "./store-api";
 
 
 export function fetchProductCategories(): Promise<ICategory[]> {
@@ -57,6 +57,10 @@ export function addToCartAsync(cartItem: ICartItem): Promise<any> {
 
 export function removeFromCartAsync(cartItem: ICartItem): Promise<any> {
     return StoreApi.Instance.RemoveFromCart(cartItem);
+}
+
+export function UpdateUserAccountAsync(userAccount: IUserAccount): Promise<string> {
+    return StoreApi.Instance.UpdateUserAccount(userAccount);
 }
 
 class StoreApi extends APIClient {
@@ -140,6 +144,12 @@ class StoreApi extends APIClient {
     async RemoveFromCart(cart: ICartItem): Promise<any> {
         const token = await auth.currentUser?.getIdToken();
         const response = await this.doDELETE(`Cart/${cart.productId}/${cart.size}`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async UpdateUserAccount(userAccount: IUserAccount): Promise<string> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doPOST(`User`, userAccount, { headers: { Authorization: `Bearer ${token}` } });
         return response;
     }
 }
