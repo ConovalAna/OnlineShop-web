@@ -11,26 +11,45 @@ import {
 } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { addToCart } from '../../../store/cart/cartSlice';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { IProduct } from '../../../api/store-api';
+import { RootState } from '../../../store';
+import useCart from '../hooks/useCart';
 
-export default function CardPopupInfo({ card }: any) {
+export default function CardPopupInfo({ card }: { card: IProduct }) {
     const [size, setSize] = React.useState('');
+    const cart = useCart();
     const [sizeStock, setSizeStock] = React.useState({
         stockSize: 0,
         stockCount: 0,
     });
     const [count, setCount] = React.useState('');
-    const [sizes, setSizes] = React.useState([]);
+    const [sizes, setSizes] = React.useState<any>([]);
+
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    useEffect(() => {
+        if (cartItems) {
+            let cartItem = cartItems.find(
+                (cartItem) => card.productId === cartItem.productId
+            );
+            setSize(`${cartItem?.size}`);
+            let correctSize = sizes.find(
+                (size: any) => size.stockSize == `${cartItem?.size}`
+            );
+            if (correctSize) setSizeStock(correctSize);
+            setCount(`${cartItem?.quantity}`);
+        } else {
+        }
+    }, [cartItems]);
 
     useEffect(() => {
-        const sizes2 = card.stocks.map((stock: any) => {
+        const sizes2 = card.stocks?.map((stock: any) => {
             let stockSize = stock.size;
             let stockCount = stock.quantity;
             return { stockSize: stockSize, stockCount: stockCount };
         });
-        setSizes(sizes2);
+        setSizes(sizes2 ?? []);
         console.log(sizes2);
     }, []);
 
@@ -49,15 +68,18 @@ export default function CardPopupInfo({ card }: any) {
         console.log(card);
     };
 
-    const dispatch = useDispatch();
-
-    const cartHandler = () => dispatch(addToCart(card));
+    const cartHandler = () =>
+        cart.addToCartHandler({
+            productId: card.productId,
+            quantity: parseInt(count),
+            size: parseInt(size),
+        });
 
     return (
         <Grid container spacing={3}>
             <Grid item xs={6}>
                 <Carousel>
-                    {card.imagesUrl.map((url: any) => (
+                    {card.imagesUrl?.map((url: any) => (
                         <img src={url} className="card-button__images" />
                     ))}
                 </Carousel>
@@ -90,9 +112,7 @@ export default function CardPopupInfo({ card }: any) {
                             <Grid item xs={12}>
                                 <hr className="divider" />
                             </Grid>
-                            {/* {ColorContainer} */}
-                            {/* {SizeContainer}
-                    {BuySection} */}
+
                             <Grid item xs={12} direction="row" display="flex">
                                 <Box
                                     sx={{
@@ -118,9 +138,6 @@ export default function CardPopupInfo({ card }: any) {
                                                     {size1.stockSize}
                                                 </MenuItem>
                                             ))}
-                                            {/* <MenuItem value={10}>10</MenuItem>
-                                            <MenuItem value={20}>20</MenuItem>
-                                            <MenuItem value={30}>30</MenuItem> */}
                                         </Select>
                                     </FormControl>
                                 </Box>
@@ -152,9 +169,6 @@ export default function CardPopupInfo({ card }: any) {
                                                     {quantity}
                                                 </MenuItem>
                                             ))}
-                                            {/* <MenuItem value={10}>1</MenuItem>
-                                            <MenuItem value={20}>2</MenuItem>
-                                            <MenuItem value={30}>3</MenuItem> */}
                                         </Select>
                                     </FormControl>
                                 </Box>

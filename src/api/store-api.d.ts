@@ -22,6 +22,12 @@ export interface IDeliveryMethod {
     deliveryName: string
 }
 
+export interface ICartItem {
+    productId: number,
+    quantity: number,
+    size: number
+}
+
 export interface IProduct {
     productId: number,
     name: string,
@@ -35,7 +41,7 @@ export interface IProduct {
     isDeleted?: boolean,
     created?: string,
     updated?: string,
-    imagesUrl?: IImageUrl[],
+    imagesUrl?: string[],
     stocks?: IStock[],
     category?: ICategory,
     deliveryTypes?: IDeliveryMethod[]

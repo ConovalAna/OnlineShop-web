@@ -62,7 +62,7 @@ export default class APIClient {
             const accessToken = "";
             options.headers!.Authorization = `Bearer ${accessToken}`;
         }
-
+        options.headers =   { ...this.defaultHeaders, ...(options.headers || {}) };
         return fetch(url, options).then(this.checkResponseStatus).then(this.parseResponse);
     }
 
@@ -78,8 +78,9 @@ export default class APIClient {
         data: any,
         options: APIOptions = {},
     ) {
+        var headers =  { ...this.defaultHeaders, ...(options.headers || {}) };
         return this.request(this.getUrl(path), {
-            headers: { ...this.defaultHeaders, ...(options.headers || {}) },
+            headers: headers,
             method: 'POST',
             body: data ? JSON.stringify(data) : data,
             ...options,

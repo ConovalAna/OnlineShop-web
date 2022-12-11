@@ -1,5 +1,6 @@
+import { auth } from "../firebase";
 import APIClient from "./api";
-import { ICategory, IDeliveryMethod, IProduct } from "./store-api";
+import { ICartItem, ICategory, IDeliveryMethod, IProduct } from "./store-api";
 
 
 export function fetchProductCategories(): Promise<ICategory[]> {
@@ -40,6 +41,18 @@ export function deleteFromFavoriteAsync(productId: number, userId: number): Prom
 
 export function getFavoriteAsync(userId: number): Promise<IProduct> {
     return StoreApi.Instance.GetFavorite(userId);
+}
+
+export function fetchCartAsync(): Promise<ICartItem[]> {
+    return StoreApi.Instance.GetCart();
+}
+
+export function addToCartAsync(cartItem: ICartItem): Promise<any> {
+    return StoreApi.Instance.AddToCart(cartItem);
+}
+
+export function removeFromCartAsync(cartItem: ICartItem): Promise<any> {
+    return StoreApi.Instance.RemoveFromCart(cartItem);
 }
 
 class StoreApi extends APIClient {
@@ -100,6 +113,24 @@ class StoreApi extends APIClient {
 
     async GetFavorite(userId: number): Promise<any> {
         const response = await this.doGET(`products/favorite/${userId}`, {});
+        return response;
+    }
+
+    async GetCart(): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doGET(`Cart`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async AddToCart(cart: ICartItem): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doPOST(`Cart`, cart, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async RemoveFromCart(cart: ICartItem): Promise<any> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doDELETE(`Cart/${cart.productId}/${cart.size}`, { headers: { Authorization: `Bearer ${token}` } });
         return response;
     }
 }
