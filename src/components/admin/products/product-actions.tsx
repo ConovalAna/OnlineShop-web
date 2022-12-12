@@ -67,7 +67,7 @@ export default function ProductActions({ productId }: { productId: number }) {
     };
 
     const handleEdit = () => {
-        navigate('/products/edit/' + productId);
+        navigate('/admin/products/edit/' + productId);
     };
 
     const onDelete = () => {

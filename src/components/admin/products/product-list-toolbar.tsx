@@ -48,7 +48,7 @@ export default function ProductListToolbar(props: any) {
                         color="primary"
                         variant="contained"
                         onClick={() => {
-                            navigate('/products/add');
+                            navigate('/admin/products/add');
                         }}
                     >
                         Add Product

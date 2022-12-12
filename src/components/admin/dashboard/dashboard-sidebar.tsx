@@ -23,7 +23,7 @@ const items = [
         title: 'Customers',
     },
     {
-        href: '/products',
+        href: '/admin/products',
         icon: <ShoppingBagIcon fontSize="small" />,
         title: 'Products',
     },

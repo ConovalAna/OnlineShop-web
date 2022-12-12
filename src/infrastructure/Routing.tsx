@@ -14,13 +14,14 @@ import EditProduct from '../components/admin/product/edit-product';
 import Sneakers from '../components/sneakers';
 import Favorites from '../components/sneakers/components/Favorites';
 import Orders from '../components/sneakers/pages/Orders';
+import AuthenticatedAdminRoute from './AuthenticatedAdminRoute';
 
 const Routing = () => (
     <Router>
         <Routes>
-            <Route path="/" element={<AuthenticatedRoute />}>
-                <Route path="/" element={<Admin />} />
-                <Route path="/" element={<Admin />}>
+            <Route path="/admin" element={<AuthenticatedAdminRoute />}>
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin" element={<Admin />}>
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="products/add" element={<AddProduct />} />
                     <Route
@@ -31,9 +32,9 @@ const Routing = () => (
             </Route>
             <Route path="/" element={<UnauthenticatedRoute />}>
                 <Route path="/sneakers" element={<Sneakers />} />
+                <Route path="/" element={<Sneakers />} />
                 <Route path="/favorite" element={<Favorites />} />
                 <Route path="/orders" element={<Orders />} />
-
             </Route>
             <Route path="/login" element={<UnauthenticatedRoute />}>
                 <Route path="/login" element={<LoginPage />} />
