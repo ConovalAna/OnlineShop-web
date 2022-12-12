@@ -177,7 +177,9 @@ export default function CardPopupInfo({ card }: { card: IProduct }) {
                             justifyContent="space-between"
                         >
                             <Button variant="text">
-                                {cartItem ? cartItem.quantity * card.price : "---"}
+                                {cartItem
+                                    ? cartItem.quantity * card.price + ' ron'
+                                    : '---'}
                             </Button>
                             <Button
                                 onClick={cartHandler}
