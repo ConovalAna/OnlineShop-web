@@ -1,6 +1,6 @@
 import { auth } from "../firebase";
 import APIClient from "./api";
-import { ICartItem, ICategory, IDeliveryMethod, IProduct, IUserAccount } from "./store-api";
+import { ICartItem, ICategory, IDeliveryMethod, IOrder, IProduct, IUserAccount } from "./store-api";
 
 
 export function fetchProductCategories(): Promise<ICategory[]> {
@@ -62,6 +62,19 @@ export function removeFromCartAsync(cartItem: ICartItem): Promise<any> {
 export function UpdateUserAccountAsync(userAccount: IUserAccount): Promise<string> {
     return StoreApi.Instance.UpdateUserAccount(userAccount);
 }
+
+export function MakeOrderAsync(order: IOrder): Promise<number> {
+    return StoreApi.Instance.MakeOrder(order);
+}
+
+export function MakeOrderAnonymousAsync(order: IOrder): Promise<number> {
+    return StoreApi.Instance.MakeOrderAnonymous(order);
+}
+
+export function fetchOrdersAsync(): Promise<IOrder[]> {
+    return StoreApi.Instance.FetchOrder();
+}
+
 
 class StoreApi extends APIClient {
     private static _instance: StoreApi;
@@ -150,6 +163,24 @@ class StoreApi extends APIClient {
     async UpdateUserAccount(userAccount: IUserAccount): Promise<string> {
         const token = await auth.currentUser?.getIdToken();
         const response = await this.doPOST(`User`, userAccount, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async MakeOrder(order: IOrder): Promise<number> {
+        const token = await auth.currentUser?.getIdToken();
+        const response = await this.doPOST(`order`, order, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async FetchOrder(): Promise<IOrder[]> {
+        const token = await auth.currentUser?.getIdToken();
+        if(!token) return [];
+        const response = await this.doGET(`order`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async MakeOrderAnonymous(order: IOrder): Promise<number> {
+        const response = await this.doPOST(`order/anonymous`, order, { });
         return response;
     }
 }

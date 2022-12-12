@@ -81,11 +81,11 @@ function Card({ card, isLoading }: any) {
                     <img
                         // onClick={() =>{ openImagePopup(card)}}
                         className="card__image"
-                        src={card.imagesUrl[0]}
-                        alt={card.name}
+                        src={card?.imagesUrl[0]}
+                        alt={card?.name}
                         onClick={() => handleClickOpen()}
                     />
-                    <p className="card__title">{card.name}</p>
+                    <p className="card__title">{card?.name}</p>
                     <div className="card__buy">
                         <div className="card__price">
                             <p className="card__price-title">Price:</p>
@@ -118,7 +118,7 @@ function Card({ card, isLoading }: any) {
                     >
                         {/* <DialogTitle>{card.name}</DialogTitle> */}
                         <DialogContent>
-                            <CardPopupInfo card={card} />
+                            <CardPopupInfo closePopup={handleClose} card={card} />
                         </DialogContent>
                     </Dialog>
                 </>

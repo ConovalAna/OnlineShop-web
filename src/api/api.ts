@@ -67,8 +67,10 @@ export default class APIClient {
     }
 
     doGET(path: string, options: APIOptions) {
+        var headers =  { ...this.defaultHeaders, ...(options.headers || {}) };
+
         return this.request(this.getUrl(path), {
-            headers: { ...this.defaultHeaders, ...(options.headers || {}) },
+            headers: headers,
             ...options,
         });
     }

@@ -52,3 +52,15 @@ export interface IUserAccount {
     displayName: string;
     email: string;
 }
+export interface IProductOrder {
+    productId: number;
+    size: number;
+    quantity: number;
+}
+
+export interface IOrder {
+    orderId: number;
+    email: string;
+    productOrders: IProductOrder[];
+}
+

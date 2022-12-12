@@ -13,6 +13,7 @@ import AddProduct from '../components/admin/product/add-product';
 import EditProduct from '../components/admin/product/edit-product';
 import Sneakers from '../components/sneakers';
 import Favorites from '../components/sneakers/components/Favorites';
+import Orders from '../components/sneakers/pages/Orders';
 
 const Routing = () => (
     <Router>
@@ -31,6 +32,8 @@ const Routing = () => (
             <Route path="/" element={<UnauthenticatedRoute />}>
                 <Route path="/sneakers" element={<Sneakers />} />
                 <Route path="/favorite" element={<Favorites />} />
+                <Route path="/orders" element={<Orders />} />
+
             </Route>
             <Route path="/login" element={<UnauthenticatedRoute />}>
                 <Route path="/login" element={<LoginPage />} />
