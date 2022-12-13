@@ -76,6 +76,11 @@ export function fetchOrdersAsync(): Promise<IOrder[]> {
 }
 
 
+export function fetchAllOrdersAsync(): Promise<IOrder[]> {
+    return StoreApi.Instance.FetchAllOrders();
+}
+
+
 class StoreApi extends APIClient {
     private static _instance: StoreApi;
     private constructor() {
@@ -176,6 +181,13 @@ class StoreApi extends APIClient {
         const token = await auth.currentUser?.getIdToken();
         if(!token) return [];
         const response = await this.doGET(`order`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async FetchAllOrders(): Promise<IOrder[]> {
+        const token = await auth.currentUser?.getIdToken();
+        if(!token) return [];
+        const response = await this.doGET(`order/all`, { headers: { Authorization: `Bearer ${token}` } });
         return response;
     }
 

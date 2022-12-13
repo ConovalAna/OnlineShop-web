@@ -13,12 +13,12 @@ import SidebarItem from './sidebar-item';
 
 const items = [
     {
-        href: '/',
+        href: '/admin/orders',
         icon: <ChartBarIcon fontSize="small" />,
-        title: 'Dashboard',
+        title: 'Orders',
     },
     {
-        href: '/customers',
+        href: '/admin/customers',
         icon: <UsersIcon fontSize="small" />,
         title: 'Customers',
     },

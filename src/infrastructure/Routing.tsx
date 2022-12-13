@@ -6,9 +6,10 @@ import UnauthenticatedRoute from './UnauthenticatedRoute';
 
 import LoginPage from '../components/authentication/LoginPage';
 import RegisterPage from '../components/authentication/RegisterPage';
-import { NotFound } from '../components/NotFound';
 import Admin from '../components/admin';
 import AdminProducts from '../components/admin/products';
+import AdminOrders from '../components/admin/orders';
+
 import AddProduct from '../components/admin/product/add-product';
 import EditProduct from '../components/admin/product/edit-product';
 import Sneakers from '../components/sneakers';
@@ -28,6 +29,7 @@ const Routing = () => (
                         path="products/edit/:productId"
                         element={<EditProduct />}
                     />
+                    <Route path="orders" element={<AdminOrders />} />
                 </Route>
             </Route>
             <Route path="/" element={<UnauthenticatedRoute />}>

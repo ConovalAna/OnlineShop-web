@@ -62,5 +62,7 @@ export interface IOrder {
     orderId: number;
     email: string;
     productOrders: IProductOrder[];
+    created?: string;
+    userAccountId?: string;
 }
 

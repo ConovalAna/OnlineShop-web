@@ -12,6 +12,7 @@ export default function AuthenticatedRoute() {
         return <Navigate to={from?.pathname} state={{}} />;
     }
 
+    
     return auth?.user ? (
         <Outlet />
     ) : (
