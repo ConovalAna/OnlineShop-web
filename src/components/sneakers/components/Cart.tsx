@@ -9,6 +9,7 @@ import { useCart } from '../hooks/useCart';
 import { IOrder, IProductOrder } from '../../../api/store-api';
 import { useAuth } from '../../../common/auth.hook';
 import { MakeOrderAsync } from '../../../api/StoreApi';
+import Paypal from '../payment/paypal';
 
 export interface ICartProduct {
     productId: number;
@@ -152,14 +153,21 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
                                 </p>
                             </li>
                         </ul>
-                        <Button isLoading={isLoading} onClick={completeOrder}>
+                        <Paypal onApprove={()=> {
+                            completeOrder();
+                        }} />
+                        {/* <Button isLoading={isLoading} onClick={completeOrder}>
                             Make order
                             <img
                                 className="button__right-arrow"
                                 src={right_arrow}
                                 alt="Arrow"
                             />
-                        </Button>
+                            Card Type: Visa
+Card Number: 4020026289416631
+Expiration Date: 08/2024
+CVV: 095
+                        </Button> */}
                     </>
                 ) : (
                     <Message
