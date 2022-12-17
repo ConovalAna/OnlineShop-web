@@ -9,6 +9,7 @@ import {
     fetchProductsAsync,
     fetchAllOrdersAsync,
     fetchAllUsersAsync,
+    fetchAllUserOrdersAsync,
 } from './StoreApi';
 
 export const useProductsQuery = () =>
@@ -61,3 +62,15 @@ export const useFetchProductQuery = (productId: number) => {
         { staleTime: Infinity }
     );
 };
+
+export const useFetchUserOrdersQuery = (userId?: string) => {
+    return useQuery(
+        ['userOrders', userId],
+        () => fetchAllUserOrdersAsync(userId ?? ''),
+        {
+            staleTime: Infinity,
+            enabled: !!userId,
+        }
+    );
+};
+

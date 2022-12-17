@@ -4,7 +4,9 @@ import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
+import RemoveIcon from '@mui/icons-material/Delete';
 import { styled, alpha } from '@mui/material/styles';
+import { useProductDeleteMutation } from '../../../api/use-store-api';
 import { useNavigate } from 'react-router-dom';
 
 const StyledMenu = styled((props: MenuProps) => (
@@ -50,11 +52,12 @@ const StyledMenu = styled((props: MenuProps) => (
     },
 }));
 
-export default function UserActions({ userId }: { userId: string }) {
+export default function ProductActions({ productId }: { productId: number }) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
     const navigate = useNavigate();
+    const { mutate, isLoading } = useProductDeleteMutation();
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -63,8 +66,12 @@ export default function UserActions({ userId }: { userId: string }) {
         setAnchorEl(null);
     };
 
-    const handleViewOrders = () => {
-        navigate('/admin/orders/' + userId);
+    const handleEdit = () => {
+        navigate('/admin/products/edit/' + productId);
+    };
+
+    const onDelete = () => {
+        mutate(productId);
     };
 
     return (
@@ -88,11 +95,14 @@ export default function UserActions({ userId }: { userId: string }) {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleViewOrders} disableRipple>
+                <MenuItem onClick={handleEdit} disableRipple>
                     <EditIcon />
-                    View orders
+                    Edit
                 </MenuItem>
-              
+                <MenuItem onClick={onDelete} disableRipple>
+                    <RemoveIcon />
+                    Delete
+                </MenuItem>
             </StyledMenu>
         </div>
     );

@@ -16,6 +16,8 @@ import EditProduct from '../components/admin/product/edit-product';
 import Sneakers from '../components/sneakers';
 import Favorites from '../components/sneakers/components/Favorites';
 import Orders from '../components/sneakers/pages/Orders';
+import AdminOrdersProducts from '../components/admin/order-products';
+
 import AuthenticatedAdminRoute from './AuthenticatedAdminRoute';
 import About from '../components/sneakers/pages/About';
 import Contact from '../components/sneakers/pages/Contact';
@@ -33,6 +35,9 @@ const Routing = () => (
                         element={<EditProduct />}
                     />
                     <Route path="orders" element={<AdminOrders />} />
+                    <Route path="orders/:userId" element={<AdminOrders />} />
+                    <Route path="orders/:userId/:orderId" element={<AdminOrdersProducts />} />
+
                     <Route path="customers" element={<AdminCustomers />} />
                 </Route>
             </Route>

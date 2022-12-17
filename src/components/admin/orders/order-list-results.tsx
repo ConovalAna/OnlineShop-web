@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-    Avatar,
     Box,
     Card,
     Table,
@@ -13,16 +12,10 @@ import {
     Typography,
 } from '@mui/material';
 import OrderActions from './order-actions';
-import {
-    useProductCategoriesQuery,
-    useAllOrdersQuery,
-} from '../../../api/use-store-api';
-export default function OrderListResults() {
+import { IOrder } from 'api/store-api';
+export default function OrderListResults({ orders }: { orders: IOrder[] }) {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
-
-    const ordersQuery = useAllOrdersQuery();
-    const productCategories = useProductCategoriesQuery();
 
     const handleLimitChange = (event: any) => {
         setLimit(event.target.value);
@@ -48,13 +41,11 @@ export default function OrderListResults() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ordersQuery.data
+                            {orders
                                 ?.slice(page * limit, page * limit + limit)
                                 .map((order) => (
                                     <TableRow hover key={order.orderId}>
-                                        <TableCell>
-                                            {order.orderId}
-                                        </TableCell>
+                                        <TableCell>{order.orderId}</TableCell>
                                         <TableCell>
                                             <Box
                                                 sx={{
@@ -70,14 +61,19 @@ export default function OrderListResults() {
                                                 </Typography>
                                             </Box>
                                         </TableCell>
-                                        <TableCell>{order.userAccountId}</TableCell>
+                                        <TableCell>
+                                            {order.userAccountId}
+                                        </TableCell>
                                         <TableCell>{order?.created}</TableCell>
 
-                                        <TableCell>{order?.productOrders?.length}</TableCell>
                                         <TableCell>
-                                            {/* <OrderActions
-                                                productId={product.productId}
-                                            /> */}
+                                            {order?.productOrders?.length}
+                                        </TableCell>
+                                        <TableCell>
+                                            <OrderActions
+                                                orderId={order.orderId}
+                                                userId={order.userAccountId}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -87,7 +83,7 @@ export default function OrderListResults() {
             </PerfectScrollbar>
             <TablePagination
                 component="div"
-                count={ordersQuery.data?.length ?? 0}
+                count={orders?.length ?? 0}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleLimitChange}
                 page={page}

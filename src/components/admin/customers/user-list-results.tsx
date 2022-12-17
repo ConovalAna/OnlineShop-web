@@ -12,9 +12,7 @@ import {
     Typography,
 } from '@mui/material';
 import UserActions from './user-actions';
-import {
-    useAllUsersQuery,
-} from '../../../api/use-store-api';
+import { useAllUsersQuery } from '../../../api/use-store-api';
 export default function UserListResults() {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
@@ -40,6 +38,7 @@ export default function UserListResults() {
                                 <TableCell>User email</TableCell>
                                 <TableCell>User account id</TableCell>
                                 <TableCell>Display name</TableCell>
+                                <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -47,9 +46,7 @@ export default function UserListResults() {
                                 ?.slice(page * limit, page * limit + limit)
                                 .map((user, index) => (
                                     <TableRow hover key={user.userAccountId}>
-                                        <TableCell>
-                                            {index}
-                                        </TableCell>
+                                        <TableCell>{index}</TableCell>
                                         <TableCell>
                                             <Box
                                                 sx={{
@@ -65,12 +62,16 @@ export default function UserListResults() {
                                                 </Typography>
                                             </Box>
                                         </TableCell>
-                                        <TableCell>{user.userAccountId}</TableCell>
-                                        <TableCell>{user.displayName}</TableCell>
                                         <TableCell>
-                                            {/* <OrderActions
-                                                productId={product.productId}
-                                            /> */}
+                                            {user.userAccountId}
+                                        </TableCell>
+                                        <TableCell>
+                                            {user.displayName}
+                                        </TableCell>
+                                        <TableCell>
+                                            <UserActions
+                                                userId={user.userAccountId}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
