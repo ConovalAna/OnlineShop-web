@@ -64,5 +64,7 @@ export interface IOrder {
     productOrders: IProductOrder[];
     created?: string;
     userAccountId?: string;
+    address: string;
+    delType: number;
 }
 

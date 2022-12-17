@@ -56,7 +56,6 @@ function Header() {
                     </div>
                 </NavLink>
                 <ul className="header__account">
-                   
                     <li onClick={onOpenCart} className="header__cart">
                         <img
                             className="header__cart-image"
@@ -98,7 +97,7 @@ function Header() {
                         </li>
                     </NavLink>
                     <NavLink
-                        to="/favorite"
+                        to="/about"
                         className={({ isActive }) => {
                             return isActive ? 'header__link_active' : '';
                         }}
@@ -112,7 +111,7 @@ function Header() {
                         </li>
                     </NavLink>
                     <NavLink
-                        to="/favorite"
+                        to="/contact"
                         className={({ isActive }) => {
                             return isActive ? 'header__link_active' : '';
                         }}

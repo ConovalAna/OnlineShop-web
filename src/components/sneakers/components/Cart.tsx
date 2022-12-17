@@ -4,7 +4,15 @@ const empty_box = '/asset/sneakers/empty-box.jpg';
 const remove_button = '/asset/sneakers/remove-button-colored.svg';
 const right_arrow = '/asset/sneakers/right-arrow.svg';
 import Message from './Message';
-import Button from './UI/Button';
+import {
+    FormControl,
+    TextField,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    Hidden,
+    Button,
+} from '@mui/material';
 import { useCart } from '../hooks/useCart';
 import { IOrder, IProductOrder } from '../../../api/store-api';
 import { useAuth } from '../../../common/auth.hook';
@@ -25,6 +33,8 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
     const auth = useAuth();
     const [isOrderCompleted, setIsOrderCompleted] = useState(false);
     const [orderId, setOrderId] = useState<number>(0);
+    const [del, setDel] = useState('');
+    const [addres, setAddres] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
 
     const delivery = cart.amount * 0.05;
@@ -43,6 +53,8 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
                     };
                     return prodOrder;
                 }) ?? [],
+            address: addres,
+            delType: parseInt(del),
         } as IOrder;
 
         if (auth?.user) {
@@ -51,7 +63,6 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
                 setIsOrderCompleted(true);
                 cart.updateCartHandler();
                 setIsLoading(false);
-
             });
         } else {
             MakeOrderAsync(order).then((orderId) => {
@@ -61,6 +72,14 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
                 setIsLoading(false);
             });
         }
+    };
+
+    const handleChangeDel = (event: SelectChangeEvent) => {
+        setDel(event.target.value as string);
+    };
+
+    const handleChangeAddres = (event: React.ChangeEvent<any>) => {
+        setAddres(event.target.value as string);
     };
 
     const closeCart = () => {
@@ -152,22 +171,49 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
                                     {totalPrice} ron.
                                 </p>
                             </li>
+                            <li className="order-info__content">
+                                <b className="order-info__title">Delivery:</b>
+                                <div className="order-info__dots"></div>
+                                <FormControl
+                                    variant="standard"
+                                    sx={{ m: 1, minWidth: 200 }}
+                                >
+                                    <Select
+                                        labelId="demo-simple-select-helper-label"
+                                        id="demo-simple-select-helper"
+                                        value={del}
+                                        label="delType"
+                                        onChange={handleChangeDel}
+                                    >
+                                        <MenuItem value={1}>
+                                            Fan Curier
+                                        </MenuItem>
+                                        <MenuItem value={2}>Posta Ro</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </li>
+                            <li className="order-info__content">
+                                <b className="order-info__title">Addres</b>
+                                <div className="order-info__dots"></div>
+                                <TextField
+                                    required
+                                    id="name-input"
+                                    label=""
+                                    variant="outlined"
+                                    fullWidth
+                                    onChange={handleChangeAddres}
+                                    type="text"
+                                    name="name"
+                                    value={addres}
+                                />
+                            </li>
                         </ul>
-                        <Paypal onApprove={()=> {
-                            completeOrder();
-                        }} />
-                        {/* <Button isLoading={isLoading} onClick={completeOrder}>
-                            Make order
-                            <img
-                                className="button__right-arrow"
-                                src={right_arrow}
-                                alt="Arrow"
-                            />
-                            Card Type: Visa
-Card Number: 4020026289416631
-Expiration Date: 08/2024
-CVV: 095
-                        </Button> */}
+                        <Paypal
+                            onApprove={() => {
+                                completeOrder();
+                            }}
+                            amount={totalPrice / 5}
+                        />
                     </>
                 ) : (
                     <Message

@@ -17,6 +17,8 @@ import Sneakers from '../components/sneakers';
 import Favorites from '../components/sneakers/components/Favorites';
 import Orders from '../components/sneakers/pages/Orders';
 import AuthenticatedAdminRoute from './AuthenticatedAdminRoute';
+import About from '../components/sneakers/pages/About';
+import Contact from '../components/sneakers/pages/Contact';
 
 const Routing = () => (
     <Router>
@@ -39,6 +41,8 @@ const Routing = () => (
                 <Route path="/" element={<Sneakers />} />
                 <Route path="/favorite" element={<Favorites />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/about" element={<About />} />
             </Route>
             <Route path="/login" element={<UnauthenticatedRoute />}>
                 <Route path="/login" element={<LoginPage />} />

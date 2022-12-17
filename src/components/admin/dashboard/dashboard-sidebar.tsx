@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { ChartBar as ChartBarIcon } from '../../../asset/inline/icons/chart-bar';
-import { Cog as CogIcon } from '../../../asset/inline/icons/cog';
 import { Lock as LockIcon } from '../../../asset/inline/icons/lock';
 import { Selector as SelectorIcon } from '../../../asset/inline/icons/selector';
 import { ShoppingBag as ShoppingBagIcon } from '../../../asset/inline/icons/shopping-bag';
-import { User as UserIcon } from '../../../asset/inline/icons/user';
 import { UserAdd as UserAddIcon } from '../../../asset/inline/icons/user-add';
 import { Users as UsersIcon } from '../../../asset/inline/icons/users';
 import { XCircle as XCircleIcon } from '../../../asset/inline/icons/x-circle';
@@ -26,16 +24,6 @@ const items = [
         href: '/admin/products',
         icon: <ShoppingBagIcon fontSize="small" />,
         title: 'Products',
-    },
-    {
-        href: '/account',
-        icon: <UserIcon fontSize="small" />,
-        title: 'Account',
-    },
-    {
-        href: '/settings',
-        icon: <CogIcon fontSize="small" />,
-        title: 'Settings',
     },
     {
         href: '/login',
