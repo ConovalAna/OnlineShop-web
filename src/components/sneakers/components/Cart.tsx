@@ -10,14 +10,13 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
-    Hidden,
-    Button,
 } from '@mui/material';
 import { useCart } from '../hooks/useCart';
 import { IOrder, IProductOrder } from '../../../api/store-api';
 import { useAuth } from '../../../common/auth.hook';
 import { MakeOrderAsync } from '../../../api/StoreApi';
 import Paypal from '../payment/paypal';
+import { productDeliveryMethodsQuery } from '../../../api/use-store-api';
 
 export interface ICartProduct {
     productId: number;
@@ -36,6 +35,7 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
     const [del, setDel] = useState('');
     const [addres, setAddres] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
+    const productDeliveryMethods = productDeliveryMethodsQuery();
 
     const delivery = cart.amount * 0.05;
     const totalPrice = cart.amount + delivery;
@@ -185,10 +185,16 @@ function Cart({ cartCloseHandler, isCartOpened }: any) {
                                         label="delType"
                                         onChange={handleChangeDel}
                                     >
-                                        <MenuItem value={1}>
-                                            Fan Curier
-                                        </MenuItem>
-                                        <MenuItem value={2}>Posta Ro</MenuItem>
+                                        {productDeliveryMethods?.data?.map(
+                                            (del) => (
+                                                <MenuItem
+                                                    key={del.deliveryTypeId}
+                                                    value={del.deliveryTypeId}
+                                                >
+                                                    {del.deliveryName}
+                                                </MenuItem>
+                                            )
+                                        )}
                                     </Select>
                                 </FormControl>
                             </li>

@@ -10,6 +10,7 @@ import {
     fetchAllOrdersAsync,
     fetchAllUsersAsync,
     fetchAllUserOrdersAsync,
+    fetchProductDeliveryMethods,
 } from './StoreApi';
 
 export const useProductsQuery = () =>
@@ -73,4 +74,14 @@ export const useFetchUserOrdersQuery = (userId?: string) => {
         }
     );
 };
+
+export const productDeliveryMethodsQuery = () => {
+    return useQuery(
+        ['productDeliveryMethods'],
+        fetchProductDeliveryMethods,
+        {
+            staleTime: Infinity,
+        }
+    )
+}
 
