@@ -1,27 +1,41 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteProductsAsync, getFavoriteAsync, fetchCartAsync, fetchOrdersAsync, fetchProductAsync, fetchProductCategories, fetchProductsAsync, fetchAllOrdersAsync } from "./StoreApi";
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+    deleteProductsAsync,
+    getFavoriteAsync,
+    fetchCartAsync,
+    fetchOrdersAsync,
+    fetchProductAsync,
+    fetchProductCategories,
+    fetchProductsAsync,
+    fetchAllOrdersAsync,
+    fetchAllUsersAsync,
+} from './StoreApi';
 
 export const useProductsQuery = () =>
-    useQuery(['products'], fetchProductsAsync, { staleTime: 20000 })
+    useQuery(['products'], fetchProductsAsync, { staleTime: 20000 });
+
+export const useAllUsersQuery = () =>
+    useQuery(['allusers'], fetchAllUsersAsync, { staleTime: 20000 });
 
 export const useCartItemsQuery = () =>
-    useQuery(['cartItems'], fetchCartAsync, { staleTime: Infinity })
+    useQuery(['cartItems'], fetchCartAsync, { staleTime: Infinity });
 
 export const useFavoriteQuery = (user: any) =>
-    useQuery(['favorite'], getFavoriteAsync, { staleTime: Infinity, enabled: !!user })
+    useQuery(['favorite'], getFavoriteAsync, {
+        staleTime: Infinity,
+        enabled: !!user,
+    });
 
 export const useOrdersQuery = () =>
-    useQuery(['orders'], fetchOrdersAsync, { staleTime: 10000 })
+    useQuery(['orders'], fetchOrdersAsync, { staleTime: 10000 });
 
 export const useAllOrdersQuery = () =>
-    useQuery(['orders'], fetchAllOrdersAsync, { staleTime: 10000 })
+    useQuery(['ordersAll'], fetchAllOrdersAsync, { staleTime: 10000 });
 
 export const useProductCategoriesQuery = () =>
-    useQuery(
-        ['productCategories'],
-        fetchProductCategories,
-        { staleTime: Infinity }
-    );
+    useQuery(['productCategories'], fetchProductCategories, {
+        staleTime: Infinity,
+    });
 
 export const useProductDeleteMutation = () => {
     const queryClient = useQueryClient();
@@ -37,10 +51,13 @@ export const useProductDeleteMutation = () => {
         onSettled: () => {
             queryClient.invalidateQueries('products');
         },
-    })
+    });
 };
 
 export const useFetchProductQuery = (productId: number) => {
-    return useQuery(['product', productId], () => fetchProductAsync(productId), { staleTime: Infinity })
-}
-
+    return useQuery(
+        ['product', productId],
+        () => fetchProductAsync(productId),
+        { staleTime: Infinity }
+    );
+};

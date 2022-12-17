@@ -9,6 +9,7 @@ import RegisterPage from '../components/authentication/RegisterPage';
 import Admin from '../components/admin';
 import AdminProducts from '../components/admin/products';
 import AdminOrders from '../components/admin/orders';
+import AdminCustomers from '../components/admin/customers';
 
 import AddProduct from '../components/admin/product/add-product';
 import EditProduct from '../components/admin/product/edit-product';
@@ -30,6 +31,7 @@ const Routing = () => (
                         element={<EditProduct />}
                     />
                     <Route path="orders" element={<AdminOrders />} />
+                    <Route path="customers" element={<AdminCustomers />} />
                 </Route>
             </Route>
             <Route path="/" element={<UnauthenticatedRoute />}>

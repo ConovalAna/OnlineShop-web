@@ -75,6 +75,10 @@ export function fetchOrdersAsync(): Promise<IOrder[]> {
     return StoreApi.Instance.FetchOrder();
 }
 
+export function fetchAllUsersAsync(): Promise<IUserAccount[]> {
+    return StoreApi.Instance.FetchAllUsers();
+}
+
 
 export function fetchAllOrdersAsync(): Promise<IOrder[]> {
     return StoreApi.Instance.FetchAllOrders();
@@ -188,6 +192,13 @@ class StoreApi extends APIClient {
         const token = await auth.currentUser?.getIdToken();
         if(!token) return [];
         const response = await this.doGET(`order/all`, { headers: { Authorization: `Bearer ${token}` } });
+        return response;
+    }
+
+    async FetchAllUsers(): Promise<IUserAccount[]> {
+        const token = await auth.currentUser?.getIdToken();
+        if(!token) return [];
+        const response = await this.doGET(`user`, { headers: { Authorization: `Bearer ${token}` } });
         return response;
     }
 
