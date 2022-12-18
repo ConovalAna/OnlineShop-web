@@ -25,7 +25,7 @@ export default function UserListToolbar(props: any) {
                 }}
             >
                 <Typography sx={{ m: 1 }} variant="h4">
-                    Orders
+                    Customers
                 </Typography>
             </Box>
             <Box sx={{ mt: 3 }}>
@@ -46,7 +46,7 @@ export default function UserListToolbar(props: any) {
                                         </InputAdornment>
                                     ),
                                 }}
-                                placeholder="Search orders"
+                                placeholder="Search customer"
                                 variant="outlined"
                             />
                         </Box>

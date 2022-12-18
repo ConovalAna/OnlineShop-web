@@ -52,7 +52,13 @@ const StyledMenu = styled((props: MenuProps) => (
     },
 }));
 
-export default function OrderActions({ userId, orderId }: { userId?: string, orderId:number }) {
+export default function OrderActions({
+    userId,
+    orderId,
+}: {
+    userId?: string;
+    orderId: number;
+}) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -92,7 +98,7 @@ export default function OrderActions({ userId, orderId }: { userId?: string, ord
             >
                 <MenuItem onClick={handleEdit} disableRipple>
                     <EditIcon />
-                    Edit
+                    View
                 </MenuItem>
             </StyledMenu>
         </div>
