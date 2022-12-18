@@ -12,7 +12,8 @@ import {
     Typography,
 } from '@mui/material';
 import OrderActions from './order-actions';
-import { IOrder } from 'api/store-api';
+import { IOrder } from '../../../api/store-api';
+import { productDeliveryMethodsQuery } from '../../../api/use-store-api';
 export default function OrderListResults({ orders }: { orders: IOrder[] }) {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
@@ -20,6 +21,7 @@ export default function OrderListResults({ orders }: { orders: IOrder[] }) {
     const handleLimitChange = (event: any) => {
         setLimit(event.target.value);
     };
+    const productDeliveryMethods = productDeliveryMethodsQuery();
 
     const handlePageChange = (event: any, newPage: number) => {
         setPage(newPage);
@@ -37,6 +39,8 @@ export default function OrderListResults({ orders }: { orders: IOrder[] }) {
                                 <TableCell>User account id</TableCell>
                                 <TableCell>Created</TableCell>
                                 <TableCell>Number of products</TableCell>
+                                <TableCell>Address</TableCell>
+                                <TableCell>Delivery type</TableCell>
                                 <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -68,6 +72,14 @@ export default function OrderListResults({ orders }: { orders: IOrder[] }) {
 
                                         <TableCell>
                                             {order?.productOrders?.length}
+                                        </TableCell>
+                                        <TableCell>{order?.address}</TableCell>
+                                        <TableCell>
+                                            {productDeliveryMethods?.data?.find(
+                                                (type) =>
+                                                    type.deliveryTypeId ===
+                                                    order?.delType
+                                            )?.deliveryName ?? ''}
                                         </TableCell>
                                         <TableCell>
                                             <OrderActions
